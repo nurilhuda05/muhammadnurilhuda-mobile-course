@@ -1,17 +1,15 @@
-# my_first_app
+1. Apa Perbedaan antara Hot Reload dan Hot Restart?
+    Jawaban:
+    Hot Reload digunakan untuk melihat perubahan kode tanpa menjalankan aplikasi dari awal. Sedangkan Hot Restart digunakan untuk menjalankan aplikasi mulai dari awal sehingga semua data atau state kembali keposisi awal
 
-A new Flutter project.
+2. Kapan native lebih tepat dipilih daripada cross-platform?
+    Jawaban:
+    Native lebih tepat digunakan jika aplikasi membutuhkan performa yang sangat tinggi atau harus menggunakan fitur perangkat secara mendalam. Sedangkan cross-platform seperti Flutter cocok jika ingin membuat aplikasi Android dan iOS dengan satu kode yang sama sehingga lebih cepat dan hemat waktu.
 
-## Getting Started
+3. Bagaimana perubahan state berhubungan dengan widget tree dan UI deklaratif?
+    Jawaban:
+    State adalah data yang bisa berubah saat aplikasi sedang digunakan. Ketika data tersebut berubah, Flutter akan otomatis memperbarui tampilan yang berhubungan dengan data tersebut sehingga pengguna bisa langsung melihat perubahan yang terjadi.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+4. Mengapa commit kecil dengan pesan jelas bermanfaat bagi pekerjaan tim dan portfolio?
+    Jawaban:
+    Karena commit kecil dan pesan yang jelas membuat perubahan kode lebih mudah dipahami. Sehingga jika terjadi kesalahan, kita bisa menemukan dan memperbaikinya lebih cepat. Selain itu teman satu tim juga lebih mudah mengetahui perubahan yang telah dilakukan.
