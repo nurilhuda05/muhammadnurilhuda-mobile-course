@@ -1,25 +1,72 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(const ProfileApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ProfileApp extends StatelessWidget {
+  const ProfileApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Profil Mahasiswa')),
-        body: const Center(
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Icon(Icons.person, size: 72),
-            SizedBox(height: 16),
-            Text('Muhammad Nuril Huda', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold )),
-            Text('Teknik Informatika — 3G', style: TextStyle(fontSize: 20)),
-            Text('244107020004', style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
-            Text('Pemrograman Mobile — Minggu 1'),
-          ]),
-        ),
+      home: Scaffold(body: Center(child: ProfileCard())),
+    );
+  }
+}
+
+class ProfileCard extends StatelessWidget {
+  const ProfileCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 320,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.indigo.shade50,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Row(
+            children: [
+              const CircleAvatar(child: Icon(Icons.person)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Nama Mahasiswa',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text('Muhammmad Nuril Huda'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          const Row(
+            children: [
+              Expanded(child: Text('NIM')),
+              Text('244107020004'),
+            ],
+          ),
+          const Row(
+            children: [
+              Expanded(child: Text('Kelas')),
+              Text('TI-3G'),
+            ],
+          ),
+          const Row(
+            children: [
+              Expanded(child: Text('Email')),
+              Text('nurilhuda@polinema.ac.id'),
+            ],
+          ),
+        ],
       ),
     );
   }
