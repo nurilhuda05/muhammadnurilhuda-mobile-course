@@ -1,17 +1,9 @@
-# week3_navigation
+# Praktikum 1
+![screenshot](screenshot/Praktikum%201.png)
 
-A new Flutter project.
+# Praktikum 2
+![screenshot](screenshot/Praktikum%202.png)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Refleksi Pertemuan 3
+Mengapa menampilkan ulang data lama (stale data) dengan indikator refresh kadang lebih baik daripada mengosongkan layar? Kapan pola itu penting? <br>
+Karena pengguna masih dapat melihat informasi yang tersedia sambil menunggu data terbaru dimuat. Jika layar langsung dikosongkan, pengguna dapat merasa aplikasi lambat atau bahkan mengira terjadi kesalahan. Pola ini penting pada aplikasi yang sering mengambil data dari internet, seperti aplikasi ecommerce, media sosial, atau berita, agar pengalaman pengguna tetap nyaman dan informasi tetap dapat diakses selama proses pembaruan data berlangsung.
