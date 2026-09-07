@@ -1,9 +1,10 @@
-// This is a basic Flutter widget test.
+// Ini adalah pengujian widget dasar pada Flutter.
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Untuk melakukan interaksi dengan widget dalam pengujian Anda, gunakan utilitas
+// WidgetTester yang ada dalam paket flutter_test. Misalnya, Anda dapat mengirim
+// gestur ketukan (tap) dan gulir (scroll). Anda juga dapat menggunakan WidgetTester
+// untuk menemukan widget anak di dalam pohon widget, membaca teks, dan 
+// memverifikasi bahwa nilai dari properti widget sudah benar.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,11 +14,9 @@ import 'package:week3_navigation/main.dart';
 
 void main() {
   testWidgets('App renders without crashing', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
     // Aplikasi yang menggunakan Riverpod HARUS dibungkus dengan ProviderScope
     await tester.pumpWidget(const ProviderScope(child: MyApp()));
 
-    // Verify that the app builds successfully (we just check if any widget is present)
     expect(find.byType(MaterialApp), findsOneWidget);
   });
 }
