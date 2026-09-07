@@ -19,7 +19,8 @@ Requirements:<br>
 - Berikan unit test untuk notifier-nya.<br>
 Jelaskan setiap bagian kode dalam komentar.
 ## Hasil
-![screenshot](screenshot/AI%20Prompt%20Challenge.png)
+![screenshot](screenshot/AI%20Prompt%20Challenge%201.png)
+![screenshot](screenshot/AI%20Prompt%20Challenge%202.png)
 ## AI Verification Checklist
 - Apakah state diubah secara immutable (tidak ada state.add() atau mutasi list langsung)? <br>
 Ya, state sudah diubah secara immutable (tidak mutasi langsung). <br>
