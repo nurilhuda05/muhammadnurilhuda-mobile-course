@@ -1,53 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/todo_providers.dart';
-import 'stats_page.dart';
 
 class TodoPage extends ConsumerWidget {
   const TodoPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todos = ref.watch(todoListProvider);
+    final todos = ref.watch(uncompletedTodosProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('ToDo Riverpod'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.analytics),
-            tooltip: 'Statistik',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const StatsPage()),
-              );
-            },
-          ),
-        ],
       ),
       body: todos.isEmpty
           ? const Center(child: Text('Belum ada tugas'))
           : ListView.builder(
               itemCount: todos.length,
-              itemBuilder: (context, index) => ListTile(
-                leading: Checkbox(
-                  value: todos[index].done,
-                  onChanged: (_) =>
-                      ref.read(todoListProvider.notifier).toggle(index),
-                ),
-                title: Text(
-                  todos[index].title,
-                  style: TextStyle(
-                      decoration: todos[index].done
-                          ? TextDecoration.lineThrough
-                          : null),
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () =>
-                      ref.read(todoListProvider.notifier).remove(index),
-                ),
+              itemBuilder: (context, index) => TodoTile(
+                index: index,
+                todo: todos[index],
               ),
             ),
       floatingActionButton: FloatingActionButton(
@@ -81,6 +53,41 @@ class TodoPage extends ConsumerWidget {
             child: const Text('Tambah'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class TodoTile extends ConsumerWidget {
+  const TodoTile({
+    super.key,
+    required this.index,
+    required this.todo,
+  });
+
+  final int index;
+  final Todo todo;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final originalIndex = ref.read(todoListProvider).indexOf(todo);
+    // Mencergah error saat proses hapus
+    if (originalIndex == -1) return const SizedBox.shrink();
+
+    return ListTile(
+      leading: Checkbox(
+        value: todo.done,
+        onChanged: (_) => ref.read(todoListProvider.notifier).toggle(originalIndex),
+      ),
+      title: Text(
+        todo.title,
+        style: TextStyle(
+          decoration: todo.done ? TextDecoration.lineThrough : null,
+        ),
+      ),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: () => ref.read(todoListProvider.notifier).remove(originalIndex),
       ),
     );
   }
