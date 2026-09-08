@@ -34,3 +34,9 @@ Ya, provider dideklarasikan dengan tipe eksplisit dan tidak duplikat dengan prov
 Tidak, kode AI TIDAK menggunakan API Riverpod versi lama. Kode sudah menggunakan standar Riverpod versi terbaru (Riverpod 2.0+) dengan pola AsyncNotifier dan ConsumerWidget. <br>
 - Jalankan flutter analyze dan flutter test, apakah hasil AI lolos tanpa warning?<br>
 ![screenshot](screenshot/Flutter%20Analyze%20&%20Flutter%20Test%20AI%20Promt%20Challenge.png)
+
+
+# Recactoring Challenge
+Hasil Flutter analyze dan flutter test pada refactoring challenge
+![screenshot](screenshot/Flutter%20Analyze%20&%20Flutter%20Test%20Refactoring%20Challenge.png)
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/todo_providers.dart';
 
 class TodoPage extends ConsumerWidget {
@@ -11,7 +12,7 @@ class TodoPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ToDo Riverpod'),
+        title: const Text('ToDo Nuril'),
       ),
       body: todos.isEmpty
           ? const Center(child: Text('Belum ada tugas'))
@@ -75,6 +76,7 @@ class TodoTile extends ConsumerWidget {
     if (originalIndex == -1) return const SizedBox.shrink();
 
     return ListTile(
+      onTap: () => context.push('/detail/$originalIndex'),
       leading: Checkbox(
         value: todo.done,
         onChanged: (_) => ref.read(todoListProvider.notifier).toggle(originalIndex),

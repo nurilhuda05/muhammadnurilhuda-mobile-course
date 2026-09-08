@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'pages/todo_page.dart';
 import 'pages/stats_page.dart';
+import 'pages/detail_page.dart';
 
 // Konfigurasi GoRouter
 final goRouter = GoRouter(
@@ -23,6 +24,13 @@ final goRouter = GoRouter(
           builder: (context, state) => const StatsPage(),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/detail/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return DetailPage(id: id);
+      },
     ),
   ],
 );
