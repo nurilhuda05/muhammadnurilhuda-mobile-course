@@ -1,17 +1,13 @@
-# week4_api
+# PRAKTIKUM 2
+## Uji Skenario Error
+1. Skenario 1 – Internet Normal <br>
+Pengujian dilakukan saat emulator terhubung ke internet. Aplikasi berhasil mengambil data dari REST API dan menampilkan daftar post pada halaman.
+![screenshoot](screenshoot/Praktikum%202.1.png)
 
-A new Flutter project.
+2. Skenario 2 – Internet Dimatikan <br>
+engujian dilakukan dengan mematikan koneksi internet emulator. Aplikasi gagal mengambil data dan menampilkan pesan “Tidak dapat terhubung ke server” serta tombol “Coba lagi”.
+![screenshoot](screenshoot/Praktikum%202.2.png)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. Skenario 3 – URL API Salah <br>
+Pengujian dilakukan dengan mengganti URL API menjadi alamat yang salah. Aplikasi gagal terhubung ke server dan menampilkan pesan error yang mudah dipahami pengguna.
+![screenshoot](screenshoot/Praktikum%202.3.png)
