@@ -11,3 +11,8 @@ engujian dilakukan dengan mematikan koneksi internet emulator. Aplikasi gagal me
 3. Skenario 3 – URL API Salah <br>
 Pengujian dilakukan dengan mengganti URL API menjadi alamat yang salah. Aplikasi gagal terhubung ke server dan menampilkan pesan error yang mudah dipahami pengguna.
 ![screenshoot](screenshoot/Praktikum%202.3.png)
+
+# PRAKTIKUM 3
+## Hasil
+![screenshoot](screenshoot/Praktikum%203.1.png)
+Pada Praktikum 3, aplikasi berhasil menerapkan pagination dengan menampilkan data dari REST API sebanyak 10 data per halaman. Data berikutnya akan dimuat ketika pengguna melakukan scroll ke bagian bawah, disertai indikator loading.<br>
