@@ -31,3 +31,9 @@ Ya, baseUrl dan timeout sudah terpusat di satu client, sehingga kita tidak perlu
 Ya, tes yang dibuat tidak hanya menguji happy path, tetapi juga telah menguji kasus field yang hilang secara menyeluruh. Selain menguji JSON kosong, telah ditambahkan pula 1 edge case ekstrim di mana endpoint merespons dengan tipe data yang sepenuhnya salah (seperti angka yang berisi string dan boolean) serta field yang secara eksplisit bernilai null. Seluruh edge case tersebut telah berhasil ditangani oleh model menggunakan nilai fallback/default yang aman sehingga mencegah terjadinya crash (TypeError). <br>
 6. Jalankan flutter analyze dan flutter test, apakah hasil AI lolos tanpa warning?<br>
 ![screenshoot](screenshoot/AI%20Challenge%201.png)
+
+# REFACTORING CHALLENGE
+## HASIL
+![screenshoot](screenshoot/Refactoring%201.png)
+
+![screenshoot](screenshoot/Refactoring%202.png)

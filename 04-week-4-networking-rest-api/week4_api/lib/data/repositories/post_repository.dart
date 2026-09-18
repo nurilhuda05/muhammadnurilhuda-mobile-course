@@ -21,6 +21,7 @@ class PostRepository {
       if (data == null) return null;
       return Post.fromJson(data);
     } catch (_) {
+      return null;
     }
   }
   Future<List<Post>> fetchPostsPage({
