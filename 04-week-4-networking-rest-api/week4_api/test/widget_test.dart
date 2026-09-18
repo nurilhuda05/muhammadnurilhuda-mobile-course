@@ -7,24 +7,42 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:week4_api/main.dart';
+import 'package:week4_api/data/providers.dart';
+import 'package:week4_api/data/repositories/post_repository.dart';
+import 'package:week4_api/data/models/post.dart';
+import 'package:dio/dio.dart';
+
+class MockPostRepository extends PostRepository {
+  MockPostRepository() : super(Dio());
+
+  @override
+  Future<List<Post>> fetchPosts() async => [];
+
+  @override
+  Future<List<Post>> fetchPostsPage({required int page, int limit = 10}) async => [];
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('App starts smoke test', (WidgetTester tester) async {
+    // Karena aplikasi menggunakan Riverpod dan memicu request HTTP saat 
+    // pertama kali dibuka (yang memicu pending timers di Dio),
+    // kita akan mem-mock repository-nya agar mengembalikan list kosong.
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          postRepositoryProvider.overrideWithValue(MockPostRepository()),
+        ],
+        child: const MyApp(),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpAndSettle();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verifikasi bahwa aplikasi berhasil dirender dengan memeriksa
+    // apakah MaterialApp ada (menandakan root widget berhasil dibuild).
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }
