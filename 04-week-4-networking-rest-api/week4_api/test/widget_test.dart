@@ -1,9 +1,5 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Widget test yang kompatibel dengan GoRouter + Riverpod.
+// Menggunakan mock repository agar tidak ada HTTP request sungguhan.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,6 +19,9 @@ class MockPostRepository extends PostRepository {
 
   @override
   Future<List<Post>> fetchPostsPage({required int page, int limit = 10}) async => [];
+
+  @override
+  Future<Post?> fetchPost(int id) async => null;
 }
 
 void main() {
@@ -41,8 +40,8 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // Verifikasi bahwa aplikasi berhasil dirender dengan memeriksa
-    // apakah MaterialApp ada (menandakan root widget berhasil dibuild).
+    // Verifikasi bahwa aplikasi berhasil dirender.
+    // MaterialApp.router masih merupakan MaterialApp, jadi finder ini tetap valid.
     expect(find.byType(MaterialApp), findsOneWidget);
   });
 }

@@ -13,6 +13,16 @@ class PostRepository {
         .map(Post.fromJson)
         .toList();
   }
+
+  Future<Post?> fetchPost(int id) async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>>('/posts/$id');
+      final data = response.data;
+      if (data == null) return null;
+      return Post.fromJson(data);
+    } catch (_) {
+    }
+  }
   Future<List<Post>> fetchPostsPage({
     required int page,
     int limit = 10,

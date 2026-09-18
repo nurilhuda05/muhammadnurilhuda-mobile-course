@@ -72,3 +72,19 @@ class PagedPostsNotifier extends Notifier<PagedPostsState> {
 final pagedPostsProvider =
     NotifierProvider<PagedPostsNotifier, PagedPostsState>(
         PagedPostsNotifier.new);
+
+/// Provider untuk detail post berdasarkan [id].
+final postDetailProvider = FutureProvider.family<Post?, int>(
+  (ref, id) async {
+    final pagedState = ref.read(pagedPostsProvider);
+    final cached = pagedState.items.cast<Post?>().firstWhere(
+          (p) => p?.id == id,
+          orElse: () => null,
+        );
+    if (cached != null) return cached;
+
+    final repo = ref.read(postRepositoryProvider);
+    return repo.fetchPost(id);
+  },
+  retry: (retryCount, error) => null,
+);

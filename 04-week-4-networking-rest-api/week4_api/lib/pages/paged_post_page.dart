@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/paged_posts.dart';
-import '../data/providers.dart';
+import '../data/network_errors.dart';
+import '../widgets/post_tile.dart';
 
 class PagedPostPage extends ConsumerStatefulWidget {
   const PagedPostPage({super.key});
@@ -75,21 +76,7 @@ class _PagedPostPageState
             );
           }
           final post = state.items[index];
-          return SizedBox(
-            height: 90,
-            child: ListTile(
-              leading: CircleAvatar(
-                child: Text(
-                  post.id.toString(),
-                ),
-            ),
-            title: Text(
-            post.title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            ),
-        ),
-        );
+          return PostTile(post: post);
         },
       ),
     );
