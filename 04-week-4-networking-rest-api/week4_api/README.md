@@ -33,7 +33,12 @@ Ya, tes yang dibuat tidak hanya menguji happy path, tetapi juga telah menguji ka
 ![screenshoot](screenshoot/AI%20Challenge%201.png)
 
 # REFACTORING CHALLENGE
-## HASIL
+## Hasil
 ![screenshoot](screenshoot/Refactoring%201.png)
 
 ![screenshoot](screenshoot/Refactoring%202.png)
+
+
+# TESTING
+## Hasil
+![screenshoot](screenshoot/Testing%201.png)
