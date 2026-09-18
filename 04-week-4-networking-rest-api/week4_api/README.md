@@ -42,3 +42,14 @@ Ya, tes yang dibuat tidak hanya menguji happy path, tetapi juga telah menguji ka
 # TESTING
 ## Hasil
 ![screenshoot](screenshoot/Testing%201.png)
+
+
+# REFLEKSI
+1. Mengapa UI dilarang memanggil Dio langsung? Apa yang rusak jika aturan ini dilanggar?<br>
+UI sebaiknya tidak memanggil Dio secara langsung karena setiap bagian program memiliki tugas masing-masing. UI bertugas menampilkan data, sedangkan Repository bertugas mengambil data dari API. Jika UI langsung memanggil Dio, kode menjadi lebih sulit dirawat dan diuji. Selain itu, jika Dio ingin diganti dengan library lain seperti http, banyak bagian UI yang harus diubah. Dengan menggunakan Repository, perubahan tersebut cukup dilakukan pada bagian yang berhubungan dengan API.<br>
+2. Kapan pagination client-side cukup, dan kapan harus mengandalkan pagination server (_page/_limit)?<br>
+Pagination client-side cukup digunakan jika jumlah data tidak terlalu banyak. Contohnya daftar kontak yang hanya berisi sekitar 100 sampai 500 data. Semua data masih bisa diambil sekaligus tanpa terlalu membebani aplikasi.Pagination server lebih cocok jika jumlah datanya sangat banyak. Contohnya data transaksi, berita, atau timeline media sosial. Data dapat diambil sedikit demi sedikit menggunakan _page dan _limit, sehingga penggunaan internet dan memori HP lebih ringan.<br>
+3. Bagaimana exception repository berubah menjadi AsyncError tanpa try/catch di setiap widget? Kapan try/catch eksplisit tetap dibutuhkan?<br>
+Jika Repository mengalami error dan melempar exception, Riverpod dapat menangkap error tersebut melalui AsyncNotifier atau FutureProvider. Status data kemudian berubah menjadi AsyncError. UI cukup membaca status tersebut untuk menampilkan pesan error. Try/catch tetap dapat digunakan jika ingin menangani error secara khusus. Contohnya saat pengguna menekan tombol untuk mengirim data, login, atau saat aplikasi perlu menampilkan Snackbar atau Dialog ketika terjadi error. <br>
+4. Bagian mana dari hasil AI yang Anda perbaiki, dan mengapa?<br>
+Bagian yang diperbaiki adalah struktur folder, import, dan cara menghubungkan Provider dengan Repository. Hal ini dilakukan karena kode dari AI belum tentu sesuai dengan struktur project yang sudah dibuat. Selain itu, pada bagian unit test terkadang ada import yang kurang atau kode yang belum sesuai dengan fungsi yang ada di project. Perbaikan dilakukan agar kode dapat dijalankan dengan baik dan tetap mengikuti struktur aplikasi yang sudah digunakan.
