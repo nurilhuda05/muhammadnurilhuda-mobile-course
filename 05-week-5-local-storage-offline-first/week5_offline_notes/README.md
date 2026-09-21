@@ -39,3 +39,31 @@ Setelah kondisi online dikembalikan, pengguna kembali ke halaman Notes dan menek
 
 Hasil observasi:<br>
 Proses sinkronisasi berhasil dilakukan. Sebelum sinkronisasi terdapat catatan dengan status dirty, sedangkan setelah proses selesai jumlah pada bagian atas berubah menjadi Notes - Dirty: 0. Catatan tetap tersedia pada aplikasi, tetapi statusnya sudah tidak dirty sehingga menunjukkan bahwa proses dirty sync berhasil dilakukan.<br>
+
+# AI VERIFICATION
+
+
+## 1. Penggunaan SharedPreferences
+AI menyarankan SharedPreferences digunakan untuk menyimpan preferensi aplikasi, seperti pengaturan tema. AI tidak menyarankan daftar catatan disimpan di SharedPreferences.Hal ini sesuai dengan project yang dibuat. Pada project ini, SharedPreferences digunakan untuk menyimpan dark_mode dan waktu terakhir aplikasi dibuka. Sedangkan data catatan disimpan menggunakan SQLite melalui sqflite.<br>
+Hasil verifikasi: sesuai.
+
+## 2. Dukungan untuk Sync
+AI memberikan contoh skema yang memiliki updated_at dan sync_status. Artinya, AI tidak hanya memikirkan CRUD, tetapi juga memperhatikan kebutuhan sinkronisasi data.<br>
+Pada project yang dibuat, tabel notes memiliki updated_at dan dirty. Field dirty digunakan untuk mengetahui apakah catatan masih perlu disinkronkan atau sudah selesai disinkronkan. Field updated_at digunakan untuk menyimpan waktu terakhir catatan diperbarui.<br>
+Jadi, kebutuhan antrean sync pada project sudah dapat diterapkan walaupun nama field yang digunakan berbeda dengan contoh dari AI.<br>
+Hasil verifikasi: sesuai.
+
+## 3. Verifikasi Fitur Real-time
+AI menjelaskan bahwa Drift memiliki fitur Stream/watch() yang dapat digunakan untuk mengamati perubahan data. Dengan fitur tersebut, perubahan data dapat diketahui oleh aplikasi sehingga tampilan dapat diperbarui.<br>
+Penjelasan tersebut memiliki dasar karena AI menyebutkan penggunaan Stream/watch(). Namun, pada project ini saya tidak menggunakan Drift, tetapi menggunakan sqflite. Oleh karena itu, fitur watch() dari Drift tidak digunakan dalam implementasi project.<br>
+Hasil verifikasi: sesuai dengan penjelasan AI, tetapi belum digunakan pada project.
+
+## 4. Verifikasi Boilerplate
+AI menjelaskan bahwa Drift membutuhkan konfigurasi tambahan seperti code generation dan build_runner. Namun, saya belum melakukan percobaan langsung untuk menginstal Drift dan membuat migration pada project.<br>
+Karena belum melakukan percobaan tersebut, saya belum dapat memastikan secara langsung apakah jumlah boilerplate yang dijelaskan AI benar-benar sesuai dengan kondisi saat instalasi.<br>
+Hasil verifikasi: belum dilakukan secara langsung.
+
+## 5. Keputusan Akhir
+Setelah melakukan verifikasi, saya memilih menggunakan SharedPreferences untuk menyimpan preferensi dan sqflite untuk menyimpan catatan.<br>
+SharedPreferences digunakan karena data yang disimpan hanya berupa pengaturan sederhana seperti dark_mode. Sementara itu, sqflite digunakan untuk menyimpan catatan karena data catatan membutuhkan database yang lebih terstruktur dan dapat digunakan untuk CRUD.<br>
+Selain itu, sqflite sudah dapat memenuhi kebutuhan project saat ini. Tabel notes sudah memiliki dirty dan updated_at yang digunakan untuk mendukung proses sinkronisasi data. Oleh karena itu, saya tetap menggunakan SharedPreferences + sqflite dan tidak mengganti implementasi project menjadi Drift.
