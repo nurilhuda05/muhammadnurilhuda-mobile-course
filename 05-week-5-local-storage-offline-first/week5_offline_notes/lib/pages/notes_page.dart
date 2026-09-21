@@ -1,0 +1,106 @@
+import 'package:flutter/material.dart';
+
+import '../data/repositories/note_repository.dart';
+import '../data/sync.dart';
+
+class NotesPage extends StatefulWidget {
+  const NotesPage({super.key});
+
+  @override
+  State<NotesPage> createState() => _NotesPageState();
+}
+
+class _NotesPageState extends State<NotesPage> {
+  final NoteRepository _repository = NoteRepository();
+
+  List<dynamic> _notes = [];
+  int _dirtyCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotes();
+  }
+
+  Future<void> _loadNotes() async {
+    final notes = await _repository.fetchNotes();
+    final dirty = await _repository.countDirty();
+
+    setState(() {
+      _notes = notes;
+      _dirtyCount = dirty;
+    });
+  }
+
+  Future<void> _addNote() async {
+    await _repository.addNote(
+      title: 'Catatan ${_notes.length + 1}',
+      body: 'Catatan dibuat secara offline.',
+    );
+
+    await _loadNotes();
+  }
+
+  Future<void> _syncNotes() async {
+    final count = await syncNotes(_repository);
+
+    await _loadNotes();
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '$count catatan berhasil disinkronkan',
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Notes - Dirty: $_dirtyCount'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            },
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: _notes.length,
+        itemBuilder: (context, index) {
+          final note = _notes[index];
+
+          return ListTile(
+            title: Text(note.title),
+            subtitle: Text(note.body),
+            trailing: note.dirty
+                ? const Icon(Icons.sync_problem)
+                : const Icon(Icons.cloud_done),
+          );
+        },
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'add',
+            onPressed: _addNote,
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 12),
+          FloatingActionButton(
+            heroTag: 'sync',
+            onPressed: _syncNotes,
+            child: const Icon(Icons.sync),
+          ),
+        ],
+      ),
+    );
+  }
+}
