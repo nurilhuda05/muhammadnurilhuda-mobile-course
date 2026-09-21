@@ -67,3 +67,19 @@ Hasil verifikasi: belum dilakukan secara langsung.
 Setelah melakukan verifikasi, saya memilih menggunakan SharedPreferences untuk menyimpan preferensi dan sqflite untuk menyimpan catatan.<br>
 SharedPreferences digunakan karena data yang disimpan hanya berupa pengaturan sederhana seperti dark_mode. Sementara itu, sqflite digunakan untuk menyimpan catatan karena data catatan membutuhkan database yang lebih terstruktur dan dapat digunakan untuk CRUD.<br>
 Selain itu, sqflite sudah dapat memenuhi kebutuhan project saat ini. Tabel notes sudah memiliki dirty dan updated_at yang digunakan untuk mendukung proses sinkronisasi data. Oleh karena itu, saya tetap menggunakan SharedPreferences + sqflite dan tidak mengganti implementasi project menjadi Drift.
+
+# REFACTORING DAN TESTING
+## Checklist Verifikasi Mandiri
+
+## 1. UI tidak memanggil SQLite/SharedPreferences langsung; semua lewat repository + provider.
+Ya, karena halaman-halaman seperti notes_page.dart dan note_detail_page.dart tidak mengimpor sqflite maupun shared_preferences secara langsung. Semua operasi data dilakukan melalui NoteRepository yang menjadi satu-satunya jembatan antara UI dan database. Dengan cara ini, halaman hanya perlu memanggil fungsi seperti fetchNotes() atau addNote() tanpa perlu tahu cara kerja SQLite di baliknya.
+
+## 2. Aplikasi penuh berfungsi dalam mode pesawat: baca, tambah, hapus catatan.
+Ya, karena semua operasi catatan (baca, tambah, hapus) disimpan langsung ke SQLite lokal di perangkat tanpa membutuhkan koneksi internet. Saat catatan ditambahkan secara offline, statusnya otomatis ditandai dirty = true untuk menunjukkan bahwa data belum tersinkron ke server. Catatan tetap bisa dibaca dan dikelola meskipun tidak ada jaringan sama sekali.
+
+## 3. Badge dirty akurat sebelum/sesudah sync; cache posts tampil tanpa internet.
+Ya, karena setiap catatan yang baru dibuat akan memiliki dirty = true, dan NoteTile akan menampilkan badge "belum tersinkron" selama flag tersebut masih aktif. Setelah tombol sync ditekan dan proses syncNotes() berhasil, fungsi markAllSynced() akan mengubah semua dirty menjadi 0 di database, sehingga badge menghilang dan digantikan ikon cloud_done. Untuk cache posts, fungsi loadPostsCacheFirst() di sync.dart akan membaca data dari SQLite lokal terlebih dahulu sebelum mencoba mengambil data baru dari API, sehingga konten tetap tampil meskipun tidak ada internet.
+
+## Hasil
+![screenshot](screenshot/Testing.png)
+
