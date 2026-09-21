@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/repositories/note_repository.dart';
 import '../data/sync.dart';
+import 'settings_page.dart';
 
-class NotesPage extends StatefulWidget {
+class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
 
   @override
-  State<NotesPage> createState() => _NotesPageState();
+  ConsumerState<NotesPage> createState() => _NotesPageState();
 }
 
-class _NotesPageState extends State<NotesPage> {
+class _NotesPageState extends ConsumerState<NotesPage> {
   final NoteRepository _repository = NoteRepository();
 
   List<dynamic> _notes = [];
@@ -43,6 +45,18 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   Future<void> _syncNotes() async {
+    final isOffline = ref.read(forceOfflineProvider);
+
+    if (isOffline) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Sync gagal: Force Offline sedang aktif'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     final count = await syncNotes(_repository);
 
     await _loadNotes();
@@ -51,9 +65,8 @@ class _NotesPageState extends State<NotesPage> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          '$count catatan berhasil disinkronkan',
-        ),
+        content: Text('$count catatan berhasil disinkronkan'),
+        backgroundColor: Colors.green,
       ),
     );
   }
@@ -67,7 +80,7 @@ class _NotesPageState extends State<NotesPage> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              Navigator.pushNamed(context, '/settings');
+              context.push('/settings');
             },
           ),
         ],
