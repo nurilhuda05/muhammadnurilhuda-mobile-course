@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'data/prefs.dart';
 import 'pages/note_detail_page.dart';
 import 'pages/notes_page.dart';
 import 'pages/settings_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Catat waktu terakhir dibuka
+  await PrefsRepository().markOpenedNow();
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -14,11 +18,14 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final darkModeAsync = ref.watch(darkModeProvider);
+    final isDark = darkModeAsync.value ?? false;
+
     final GoRouter router = GoRouter(
       routes: [
         GoRoute(
@@ -42,13 +49,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Offline Notes',
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.indigo,
+          brightness: Brightness.dark,
         ),
         useMaterial3: true,
       ),
       routerConfig: router,
     );
   }
-}
+}
+

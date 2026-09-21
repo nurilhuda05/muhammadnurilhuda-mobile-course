@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PrefsRepository {
@@ -24,3 +25,26 @@ class PrefsRepository {
     return prefs.getString(_lastOpenedKey);
   }
 }
+
+final prefsRepositoryProvider = Provider<PrefsRepository>(
+  (_) => PrefsRepository(),
+);
+
+// Notifier untuk dark mode agar reaktif di seluruh app
+class DarkModeNotifier extends AsyncNotifier<bool> {
+  @override
+  Future<bool> build() async {
+    final prefs = ref.read(prefsRepositoryProvider);
+    return prefs.getDarkMode();
+  }
+
+  Future<void> toggle() async {
+    final current = state.value ?? false;
+    final next = !current;
+    await ref.read(prefsRepositoryProvider).setDarkMode(next);
+    state = AsyncData(next);
+  }
+}
+
+final darkModeProvider =
+    AsyncNotifierProvider<DarkModeNotifier, bool>(DarkModeNotifier.new);
