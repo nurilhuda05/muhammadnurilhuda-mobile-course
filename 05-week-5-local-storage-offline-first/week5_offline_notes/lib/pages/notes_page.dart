@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../data/repositories/note_repository.dart';
 import '../data/sync.dart';
@@ -76,13 +77,7 @@ class _NotesPageState extends State<NotesPage> {
         itemBuilder: (context, index) {
           final note = _notes[index];
 
-          return ListTile(
-            title: Text(note.title),
-            subtitle: Text(note.body),
-            trailing: note.dirty
-                ? const Icon(Icons.sync_problem)
-                : const Icon(Icons.cloud_done),
-          );
+          return NoteTile(note: note);
         },
       ),
       floatingActionButton: Column(
@@ -101,6 +96,32 @@ class _NotesPageState extends State<NotesPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class NoteTile extends StatelessWidget {
+  final dynamic note;
+
+  const NoteTile({
+    super.key,
+    required this.note,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(note.title),
+      subtitle: Text(note.body),
+      trailing: note.dirty
+          ? const Badge(
+              label: Text('belum tersinkron'),
+              child: Icon(Icons.sync_problem),
+            )
+          : const Icon(Icons.cloud_done),
+      onTap: () {
+        context.push('/note/${note.id}');
+      },
     );
   }
 }
