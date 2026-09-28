@@ -12,6 +12,11 @@ const _kChannelDesc = 'Notifikasi pengumuman resmi dari kampus';
 // Route string yang belum diproses router
 String? pendingDeepLink;
 
+// Ekstrak route dari data payload FCM.
+// Fungsi murni (pure function) — tidak bergantung pada Firebase, mudah di-unit-test.
+String routeFromMessage(Map<String, dynamic> data) =>
+    data['route'] is String ? data['route'] as String : '/';
+
 // Handler untuk background message FCM
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -147,7 +152,7 @@ void listenForeground(void Function(String route) go) {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     debugPrint('[FCM Foreground] ${message.notification?.title}');
 
-    final route = message.data['route'] as String? ?? '/';
+    final route = routeFromMessage(message.data);
     final title = message.notification?.title ?? 'Pengumuman';
     final body  = message.notification?.body  ?? '';
 
@@ -162,7 +167,7 @@ void listenForeground(void Function(String route) go) {
 
   // Saat user tap notifikasi saat aplikasi di background
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    final route = message.data['route'] as String? ?? '/';
+    final route = routeFromMessage(message.data);
     debugPrint('[FCM] onMessageOpenedApp → navigasi ke: $route');
     go(route);
   });
@@ -203,7 +208,7 @@ Future<void> _showLocalNotification({
 Future<void> handleTerminated(void Function(String route) go) async {
   final initial = await FirebaseMessaging.instance.getInitialMessage();
   if (initial != null) {
-    final route = initial.data['route'] as String? ?? '/';
+    final route = routeFromMessage(initial.data);
     debugPrint('[FCM] getInitialMessage → navigasi ke: $route');
     go(route);
     return;

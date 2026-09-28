@@ -19,6 +19,7 @@ Pada pengujian ini, aplikasi berada di background setelah tombol Home ditekan. S
 ![screenshot](screenshot/praktikum%203.3%20terminated.jpeg)
 Pada pengujian ini, aplikasi ditutup sepenuhnya dari Recent Apps. Setelah notifikasi dikirim dari Firebase, notifikasi tetap berhasil diterima oleh perangkat. Saat notifikasi diklik, aplikasi berhasil terbuka kembali meskipun sebelumnya dalam keadaan tertutup.
 
+
 # AI CHALLENGE
 **1. Apakah background handler berupa fungsi top-level dengan @pragma('vm:entry-point')? (tolak jika berupa method kelas).**
 Iya.Buktinya dapat dilihat pada file push_service.dart, di mana fungsi background handler dideklarasikan di tingkat paling atas (top-level) dan menggunakan anotasi @pragm('vm:entry-point')<br>
@@ -45,3 +46,9 @@ Iya, masuk ke rute yang benar. Berikut adalah tabel mekanisme penanganannya:
 
 **5. Apakah token/secret tidak di-hardcode dan tidak di-log penuh? Perbaiki bila AI melanggarnya.**
 Iya. Token FCM tidak ditulis langsung di dalam kode, tapi diambil otomatis dari perangkat lewat Firebase. Saya juga sudah memperbaiki kodenya agar token disamarkan saat dicetak, sehingga rahasia tetap aman dan tidak bocor secara penuh di log aplikasi.
+
+
+# REFACTORING
+## Hasil Flutter Analyze dan Flutter Test
+![screenshot](screenshot/flutter%20analyze%20dan%20flutter%20test.png)
+
