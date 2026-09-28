@@ -61,7 +61,7 @@ Iya. Token FCM tidak ditulis langsung di dalam kode, tapi diambil otomatis dari 
 **1. Mengapa refresh token tidak boleh disimpan di SharedPreferences? Apa risikonya bila bocor?**<br>
 Refresh token tidak boleh disimpan di SharedPreferences karena penyimpanannya kurang aman dan bisa diakses jika perangkat diretas atau aplikasi dimodifikasi. Jika token bocor, orang lain dapat meminta token baru dan mengakses layanan atas nama pengguna tanpa perlu login lagi.<br>
 
-**2. Apa yang rusak bila onTokenRefresh diabaikan selama satu semester perkuliahan? **<br>
+**2. Apa yang rusak bila onTokenRefresh diabaikan selama satu semester perkuliahan?**<br>
 Jika onTokenRefresh diabaikan, server akan menyimpan token lama yang sudah tidak valid. Akibatnya notifikasi kampus seperti pengumuman, jadwal kuliah, atau informasi penting tidak akan sampai ke perangkat mahasiswa.<br>
 
 **3. Kapan memakai topik dan kapan memakai token perangkat? Beri contoh pesan kampus untuk masing-masing.**<br>
