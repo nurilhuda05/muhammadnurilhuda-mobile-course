@@ -1,17 +1,6 @@
-# campus_notify
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# PRAKTIKUM 2
+## Hasil Pengujian Firebase Cloud Messaging
+- Notifikasi berhasil dikirim dari Firebase Console.
+- Saat aplikasi berada pada kondisi background, banner notifikasi muncul pada perangkat Android.
+- Ketika banner notifikasi ditekan, aplikasi berhasil terbuka kembali.
+![screenshot](screenshot/praktikum%202.1.jpeg)
