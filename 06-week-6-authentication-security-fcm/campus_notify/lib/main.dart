@@ -38,8 +38,12 @@ void main() async {
   // Ambil token FCM dan kirim ke backend
   await initFcmToken(
     onToken: (token) async {
-      await deviceRepo.registerToken(token);
-      debugPrint('[main] FCM token dikirim ke /devices');
+      try {
+        await deviceRepo.registerToken(token);
+        debugPrint('[main] FCM token dikirim ke /devices');
+      } catch (e) {
+        debugPrint('[main] Gagal mengirim token ke backend: $e');
+      }
     },
   );
 

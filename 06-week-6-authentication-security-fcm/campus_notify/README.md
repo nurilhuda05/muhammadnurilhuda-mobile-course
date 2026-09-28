@@ -52,3 +52,34 @@ Iya. Token FCM tidak ditulis langsung di dalam kode, tapi diambil otomatis dari 
 ## Hasil Flutter Analyze dan Flutter Test
 ![screenshot](screenshot/flutter%20analyze%20dan%20flutter%20test.png)
 
+
+# TUGAS DAN REFLEKSI
+## Token Terpotong
+![screenshot](screenshot/token%20terpotong.png)
+
+## Refleksi
+**1. Mengapa refresh token tidak boleh disimpan di SharedPreferences? Apa risikonya bila bocor?**<br>
+Refresh token tidak boleh disimpan di SharedPreferences karena penyimpanannya kurang aman dan bisa diakses jika perangkat diretas atau aplikasi dimodifikasi. Jika token bocor, orang lain dapat meminta token baru dan mengakses layanan atas nama pengguna tanpa perlu login lagi.<br>
+
+**2. Apa yang rusak bila onTokenRefresh diabaikan selama satu semester perkuliahan? **<br>
+Jika onTokenRefresh diabaikan, server akan menyimpan token lama yang sudah tidak valid. Akibatnya notifikasi kampus seperti pengumuman, jadwal kuliah, atau informasi penting tidak akan sampai ke perangkat mahasiswa.<br>
+
+**3. Kapan memakai topik dan kapan memakai token perangkat? Beri contoh pesan kampus untuk masing-masing.**<br>
+Topik digunakan untuk pesan yang dikirim ke banyak pengguna sekaligus (broadcast).<br>
+Contoh:<br>
+- Pengumuman libur kampus.<br>
+- Jadwal PKKMB.<br>
+- Informasi seminar untuk semua mahasiswa.<br>
+
+Token perangkat digunakan untuk pesan yang bersifat pribadi dan hanya untuk satu pengguna.<br>
+Contoh:<br>
+- Nilai UTS mahasiswa.
+- Tagihan UKT.
+- Status pengajuan surat akademik.
+
+**4. Bagian mana dari draf AI yang Anda tolak atau perbaiki, dan mengapa?**<br>
+Beberapa bagian dari draf AI yang saya tolak atau minta perbaiki selama pengerjaan:
+- Log Token Penuh: Awalnya AI membiarkan token FCM dicetak utuh di log. Saya meminta AI untuk memperbaikinya agar token disamarkan (dipotong) demi keamanan rahasia kredensial.<br>
+- Crash saat Startup (Unhandled Exception): Saat mencoba menjalankan aplikasi, aplikasi mengalami crash karena AI tidak memberikan error handling (try-catch) ketika mengirim token ke backend dummy. Saya meminta AI untuk memeriksa error tersebut lalu AI memperbaikinya di main.dart.<br>
+- Default Widget Test: AI membiarkan file widget_test.dart bawaan Flutter (pengujian counter) yang menyebabkan kegagalan saat flutter test. AI kemudian memperbaikinya dengan menggantinya menjadi placeholder.
+- Deskripsi README yang berlebihan: AI sempat membuat draf pengenalan proyek (Tujuan, Stack, Fitur) di bagian atas README. Saya menolak (menghapus) bagian tersebut karena saya hanya ingin fokus pada hasil pengujian dan laporan tugas praktikum.
