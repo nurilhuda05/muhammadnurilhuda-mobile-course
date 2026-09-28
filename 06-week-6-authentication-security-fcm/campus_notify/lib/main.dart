@@ -6,18 +6,29 @@ import 'pages/login_page.dart';
 import 'pages/home_page.dart';
 import 'pages/announcement_page.dart';
 import 'providers/auth_provider.dart';
+
 import 'package:firebase_core/firebase_core.dart';
+
+import 'messaging/push_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
 
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
+  await initLocalNotifications();
+
+  await requestNotificationPermission();
+
+  await initFcmToken(
+    onToken: (token) async {
+      debugPrint('FCM Token: $token');
+    },
   );
+
+  registerBackgroundHandler();
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -29,11 +40,9 @@ class MyApp extends ConsumerWidget {
 
     final router = GoRouter(
       redirect: (context, state) {
-        final loggedIn =
-            container.read(authStateProvider).value ?? false;
+        final loggedIn = container.read(authStateProvider).value ?? false;
 
-        final goingLogin =
-            state.matchedLocation == '/login';
+        final goingLogin = state.matchedLocation == '/login';
 
         if (!loggedIn && !goingLogin) {
           return '/login';
@@ -46,22 +55,19 @@ class MyApp extends ConsumerWidget {
         return null;
       },
       routes: [
-        GoRoute(
-          path: '/login',
-          builder: (_, __) => const LoginPage(),
-        ),
-        GoRoute(
-          path: '/',
-          builder: (_, __) => const HomePage(),
-        ),
+        GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
+        GoRoute(path: '/', builder: (_, __) => const HomePage()),
         GoRoute(
           path: '/pengumuman/:id',
-          builder: (_, state) => AnnouncementPage(
-            id: state.pathParameters['id'] ?? '',
-          ),
+          builder: (_, state) =>
+              AnnouncementPage(id: state.pathParameters['id'] ?? ''),
         ),
       ],
     );
+
+    listenForeground((route) => router.go(route));
+
+    handleTerminated((route) => router.go(route));
 
     return MaterialApp.router(
       title: 'Campus Notify',
