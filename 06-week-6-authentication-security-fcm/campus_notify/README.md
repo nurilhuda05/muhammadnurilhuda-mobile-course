@@ -29,6 +29,7 @@ Iya, benar-benar dikirim ke backend.Alurnya adalah sebagai berikut:<br>
 1. Pada file push_service.dart, listener onTokenRefresh memanggil callback onToken setiap kali ada token baru
 2. Kemudian pada file main.dart, callback tersebut didefinisikan untuk meneruskan token ke deviceRepo.registerToken
 3. Terakhir, di dalam device_repository.dart, fungsi registerToken benar-benar melakukan HTTP POST ke endpoint /devices menggunakan Dio
+
 Jadi, token baru tidak hanya dicetak ke log, melainkan secara aktif diproses hingga dikirim ke backend lewat API.<br>
 
 **3. Apakah foreground memakai local notification manual?**<br>
