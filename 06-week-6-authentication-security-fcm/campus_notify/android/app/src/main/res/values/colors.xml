@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Warna aksen ikon notifikasi FCM.
+      Direferensikan dari AndroidManifest.xml:
+        android:name="com.google.firebase.messaging.default_notification_color"
+
+      Ganti dengan warna brand kampus Anda (format #RRGGBB atau #AARRGGBB).
+    -->
+    <color name="notification_color">#1565C0</color>
+</resources>
