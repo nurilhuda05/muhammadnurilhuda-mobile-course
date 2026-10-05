@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/format.dart';
 import '../../domain/entities/note.dart';
 
 class NotesList extends StatelessWidget {
@@ -16,6 +17,10 @@ class NotesList extends StatelessWidget {
         return ListTile(
           title: Text(note.title),
           subtitle: Text(note.body),
+          trailing: Text(
+            formatDateTime(note.updatedAt),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         );
       },
     );

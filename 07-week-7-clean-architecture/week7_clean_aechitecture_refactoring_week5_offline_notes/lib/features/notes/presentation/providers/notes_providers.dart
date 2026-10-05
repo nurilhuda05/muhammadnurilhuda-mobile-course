@@ -19,7 +19,7 @@ final getNotesProvider = Provider<GetNotes>((ref) {
 // Presentation layer: state untuk UI
 final notesProvider = FutureProvider<List<Note>>((ref) async {
   final result = await ref.watch(getNotesProvider).call();
-  if (result.failure != null) throw Exception(result.failure!.message);
+  if (result.failure != null) throw result.failure!;
   return result.notes;
 });
 
