@@ -55,29 +55,5 @@ Tidak ditemukan penggunaan ketiga pola tersebut di dalam halaman/presentation. J
 Hasil pencarian menemukan dua penggunaan NoteRepository() secara langsung, yaitu pada note_detail_page.dart dan notes_page.dart. Hal ini menunjukkan bahwa terdapat dependency yang dibuat langsung oleh UI sehingga terjadi kebocoran dependency injection.<br>
 
 ## Gambar struktur target
-lib/
-├── core/
-│   ├── failures.dart
-│   └── providers.dart (optional)
-├── features/
-│   └── notes/
-│       ├── domain/
-│       │   ├── entities/
-│       │   │   └── note.dart
-│       │   ├── repositories/
-│       │   │   └── note_repository.dart
-│       │   └── usecases/
-│       │       ├── get_notes.dart
-│       │       └── add_note.dart
-│       ├── data/
-│       │   ├── models/
-│       │   │   └── note_model.dart
-│       │   └── repositories/
-│       │       └── note_repository_impl.dart
-│       └── presentation/
-│           ├── providers/
-│           │   └── notes_providers.dart
-│           └── pages/
-│               └── notes_page.dart
-└── routes.dart
+![screenshot](screenshot/Praktikum%201.4.png)<br>
 
