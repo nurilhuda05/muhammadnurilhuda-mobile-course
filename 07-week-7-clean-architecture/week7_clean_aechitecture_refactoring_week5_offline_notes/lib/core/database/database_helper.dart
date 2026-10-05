@@ -1,6 +1,10 @@
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
+/// Membuka (atau membuat) database SQLite untuk seluruh aplikasi.
+///
+/// Ditempatkan di `core/` karena database adalah infrastruktur
+/// yang bisa digunakan oleh banyak fitur, bukan hanya notes.
 Future<Database> openNotesDb() async {
   final dir = await getDatabasesPath();
 

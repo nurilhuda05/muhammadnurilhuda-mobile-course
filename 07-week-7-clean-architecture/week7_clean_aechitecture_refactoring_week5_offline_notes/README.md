@@ -71,3 +71,45 @@ Pada pemeriksaan dependency, dilakukan pencarian import Flutter, Dio, Sqflite, d
 
 ## Hasil Praktikum 3
 ![screenshot](screenshot/Praktikum%203.4.jpeg)<br>
+
+# HASIL AI CHALLENGE
+
+Berdasarkan hasil review AI, terdapat beberapa hal yang perlu diperhatikan pada struktur Clean Architecture project ini:<br>
+
+**1. Pemindahan `db.dart`**<br>
+File `db.dart` disarankan dipindahkan ke folder `core/`. Hal ini karena database merupakan bagian dari infrastruktur aplikasi dan tidak hanya digunakan oleh fitur `notes`. Dengan dipindahkan ke `core/`, database dapat digunakan oleh fitur lain jika aplikasi dikembangkan.<br>
+
+**2. Pemecahan `notes_page.dart`**<br>
+File `notes_page.dart` perlu dipecah karena di dalamnya terdapat empat class, yaitu `NotesPage`, `AddNoteDialog`, `ErrorView`, dan `NotesList`. Class tersebut sebaiknya dipisahkan ke file masing-masing agar setiap file memiliki tanggung jawab yang lebih jelas dan kode lebih mudah dikelola.<br>
+
+**3. Penggunaan Use Case**<br>
+`AddNote` dan `GetNotes` saat ini termasuk over-engineering untuk CRUD sederhana karena keduanya hanya meneruskan pemanggilan ke repository dan belum memiliki business logic.<br>
+
+Namun, untuk tugas kuliah, kedua use case tersebut tetap dipertahankan sebagai contoh penerapan Clean Architecture. Jika digunakan untuk project production yang hanya memiliki CRUD sederhana, use case tersebut dapat dihilangkan dan provider dapat memanggil repository secara langsung.<br>
+
+**4. Dependency Injection dengan Riverpod**<br>
+Terdapat dua pilihan dalam wiring Dependency Injection menggunakan Riverpod.
+
+   * **Opsi A (Academic):** tetap menggunakan use case. Alurnya menjadi UI → Provider → Use Case → Repository. Struktur ini lebih lengkap dan sesuai untuk menunjukkan pola Clean Architecture, tetapi memiliki lebih banyak lapisan.
+   * **Opsi B (Pragmatic):** tidak menggunakan use case. Alurnya menjadi UI → Provider → Repository. Struktur ini lebih sederhana dan cocok untuk CRUD sederhana, tetapi kurang menunjukkan penerapan lengkap Clean Architecture.
+
+Untuk tugas praktikum ini, **Opsi A dipilih** karena tujuan utamanya adalah mempelajari dan menunjukkan penerapan Clean Architecture.
+
+# AI VERIFICATION 
+**1. Apakah interface repository tinggal di domain dan implementasi di data? (tolak bila AI menaruh keduanya di satu folder).**<br>
+Interface repository sudah berada di Domain Layer, yaitu abstract class NoteRepository pada domain/repositories/note_repository.dart. Implementasinya berada di Data Layer, yaitu NoteRepositoryImpl pada data/repositories/note_repository_impl.dart. Keduanya tidak berada dalam satu folder dan dependency mengarah dari Data ke Domain, sehingga pembagian repository sudah sesuai dengan prinsip Clean Architecture.<br>
+
+**2. Apakah domain bebas import Flutter/Dio/SQLite/Firebase? Periksa dengan grep, bukan dengan membaca sekilas.**<br>
+Domain sudah bebas dari dependency seperti Flutter, Dio, SQLite, Firebase, dan Path. Hasil pengecekan pada folder domain/ tidak menemukan import dari package tersebut. Domain hanya menggunakan file internal seperti entity Note dan Failure. Sementara itu, dependency seperti SQLite dan Path hanya digunakan pada bagian infrastruktur database, sehingga Domain tetap berupa kode Dart yang independen.<br>
+
+**3. Apakah AI membuat use case untuk tiap CRUD satu-baris? (itu over-engineering: cukup repository langsung ke notifier, dengan alasan tertulis).**<br>
+Use case AddNote dan GetNotes termasuk over-engineering untuk CRUD sederhana karena keduanya hanya meneruskan pemanggilan ke repository tanpa memiliki business logic. Meskipun demikian, kedua use case tetap dipertahankan karena project ini merupakan tugas kuliah Week 7 yang bertujuan menunjukkan penerapan layer Clean Architecture. Untuk project production dengan CRUD sederhana, use case dapat dihilangkan dan provider dapat memanggil repository secara langsung. Use case akan lebih diperlukan ketika sudah terdapat business logic seperti validasi atau orkestrasi beberapa repository.<br>
+
+**4. Apakah entity bebas mapping (toMap/fromMap/toJson hanya di model)?**<br>
+Entity Note sudah bebas dari proses mapping data. Hasil pengecekan tidak menemukan toMap, fromMap, toJson, atau fromJson pada Domain Layer. Proses mapping hanya dilakukan pada NoteModel di Data Layer melalui toMap(), fromMap(), dan toEntity(). Dengan demikian, entity tetap menjadi plain class dan tidak bergantung pada format penyimpanan database.<br>
+
+**5. Apakah wiring DI terpusat di provider dan widget tidak new Repository() sendiri?**<br>
+Dependency Injection sudah ditempatkan pada provider dan widget tidak membuat NoteRepositoryImpl secara langsung. NoteRepositoryImpl dibuat melalui noteRepositoryProvider di notes_providers.dart, kemudian widget mengakses dependency melalui ref.watch() atau ref.read(). Dengan cara ini, Presentation Layer tidak perlu mengetahui bagaimana repository dibuat dan implementasinya dapat diganti ketika melakukan testing<br>
+
+**6. Kesimpulan Akhir**<br>
+Berdasarkan hasil verifikasi, use case AddNote dan GetNotes tetap dipertahankan karena sesuai dengan tujuan pembelajaran Clean Architecture pada tugas Week 7. Datasource layer tidak ditambahkan karena repository saat ini hanya menggunakan satu sumber data, yaitu SQLite, sehingga penambahan abstraction tambahan dianggap belum diperlukan. Database ditempatkan pada core/ karena merupakan infrastruktur yang dapat digunakan oleh berbagai fitur. notes_page.dart juga dipecah menjadi beberapa file agar setiap widget memiliki tanggung jawab yang lebih jelas. Untuk Dependency Injection digunakan Riverpod tanpa GetIt atau Injectable karena Riverpod sudah dapat digunakan sebagai DI sekaligus state management.<br>

@@ -3,7 +3,7 @@ import '../../data/repositories/note_repository_impl.dart';
 import '../../domain/repositories/note_repository.dart';
 import '../../domain/usecases/get_notes.dart';
 import '../../domain/entities/note.dart';
-import '../../data/local/db.dart';
+import '../../../../core/database/database_helper.dart';
 import '../../domain/usecases/add_note.dart';
 
 // Data layer: database opener disuntikkan (mudah diganti fake saat test)
