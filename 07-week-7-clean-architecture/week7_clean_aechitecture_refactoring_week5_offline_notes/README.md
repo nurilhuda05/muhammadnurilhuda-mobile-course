@@ -113,3 +113,26 @@ Dependency Injection sudah ditempatkan pada provider dan widget tidak membuat No
 
 **6. Kesimpulan Akhir**<br>
 Berdasarkan hasil verifikasi, use case AddNote dan GetNotes tetap dipertahankan karena sesuai dengan tujuan pembelajaran Clean Architecture pada tugas Week 7. Datasource layer tidak ditambahkan karena repository saat ini hanya menggunakan satu sumber data, yaitu SQLite, sehingga penambahan abstraction tambahan dianggap belum diperlukan. Database ditempatkan pada core/ karena merupakan infrastruktur yang dapat digunakan oleh berbagai fitur. notes_page.dart juga dipecah menjadi beberapa file agar setiap widget memiliki tanggung jawab yang lebih jelas. Untuk Dependency Injection digunakan Riverpod tanpa GetIt atau Injectable karena Riverpod sudah dapat digunakan sebagai DI sekaligus state management.<br>
+
+
+# REFELEKSI
+**1. Mengapa interface repository harus tinggal di domain, bukan di data? Apa yang rusak bila dibalik?**<br>
+Interface repository diletakkan di domain karena domain berisi aturan dan kebutuhan utama aplikasi, sehingga domain menentukan operasi apa yang dibutuhkan tanpa bergantung pada cara data tersebut disimpan. Implementasinya kemudian berada di data, misalnya NoteRepositoryImpl yang menggunakan SQLite. Jika interface dibalik dan diletakkan di data, domain menjadi bergantung pada detail penyimpanan data. Akibatnya, prinsip dependency rule menjadi tidak sesuai karena bagian inti aplikasi harus mengetahui detail teknis seperti database, sehingga kode menjadi lebih sulit diuji dan dikembangkan.<br>
+
+**2. Kapan use case benar-benar dibutuhkan, dan kapan repository langsung ke notifier sudah cukup?**<br>
+Use case benar-benar dibutuhkan ketika suatu proses memiliki aturan bisnis atau alur yang lebih kompleks, misalnya melakukan beberapa operasi repository, melakukan validasi, atau menggabungkan beberapa proses sebelum menghasilkan suatu hasil. Namun, jika aplikasi hanya memiliki CRUD sederhana dan use case hanya meneruskan pemanggilan repository tanpa tambahan logika, repository langsung ke notifier sudah cukup. Pada proyek ini, AddNote dan GetNotes masih berupa pass-through sehingga sebenarnya belum memiliki logika bisnis tambahan.<br>
+
+**3. Apa biaya over-engineering (use case per CRUD satu-baris) bagi tim kecil? Kapan biayanya sepadan?**<br>
+Penggunaan use case untuk setiap operasi CRUD yang hanya terdiri dari satu pemanggilan repository dapat menambah jumlah file, kode, dan lapisan yang harus dipahami oleh tim. Bagi tim kecil, hal ini dapat membuat proses pengembangan dan pemeliharaan menjadi lebih lambat karena perubahan sederhana harus melewati beberapa lapisan. Biaya tersebut menjadi sepadan ketika aplikasi mulai memiliki aturan bisnis yang kompleks, banyak fitur, atau membutuhkan pemisahan tanggung jawab yang lebih jelas.<br>
+
+**4. Bagian mana dari usulan AI yang Anda tolak atau sederhanakan, dan mengapa?**<br>
+Bagian yang disederhanakan adalah usulan untuk menambahkan lapisan datasource khusus pada fitur notes. Lapisan tersebut tidak digunakan karena aplikasi saat ini hanya memiliki satu sumber data, yaitu SQLite, dan repository hanya menangani beberapa operasi sederhana. Menambahkan datasource akan membuat struktur menjadi lebih panjang tanpa memberikan manfaat yang besar pada kondisi aplikasi sekarang. Selain itu, use case tetap dipertahankan karena sesuai dengan tujuan pembelajaran Week 7, sedangkan database tetap ditempatkan sebagai infrastruktur bersama di core dan dependency injection tetap menggunakan Riverpod tanpa menambahkan package DI lain.<br>
+
+# HASIL AKHIR
+## Flutter Analyze dan Flutter Test
+![screenshot](screenshot/Hasil%20Akhir%20Flutter%20Analyze%20dan%20Test.png)<br>
+
+## Tampilan Mobile
+![screenshot](screenshot/Hasil%20Akhir%201.jpeg)<br>
+
+![screenshot](screenshot/Hasil%20Akhir%202.jpeg)<br>
