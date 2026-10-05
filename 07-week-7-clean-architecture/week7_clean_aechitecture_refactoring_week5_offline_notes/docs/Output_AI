@@ -1,0 +1,95 @@
+# Perbandingan Penyimpanan Lokal (Flutter Offline Notes)
+
+Untuk aplikasi catatan offline dengan fitur CRUD dan preferensi tema, pemilihan database lokal sangat menentukan performa dan skalabilitas aplikasi, terutama ketika data mencapai ratusan atau ribuan entri.
+
+Berikut adalah perbandingan antara **SharedPreferences**, **Hive**, **sqflite**, dan **Drift** berdasarkan kriteria yang Anda berikan.
+
+## 1. Perbandingan Kriteria
+
+| Kriteria | SharedPreferences | Hive (NoSQL) | sqflite (SQLite) | Drift (SQLite ORM) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Kompleksitas Query** | Sangat Rendah (Hanya Key-Value) | Menengah (NoSQL, tidak ada JOIN) | Tinggi (SQL murni) | Tinggi (Query builder & SQL) |
+| **Kebutuhan Relasi** | Tidak mendukung | Manual (menyimpan ID referensi) | Sangat baik (Relasi & JOIN SQL) | Sangat baik (Relasi ORM) |
+| **Reaktivitas (Stream)**| Tidak bawaan | Ya (`ValueListenable`) | Tidak bawaan | Ya (Stream/`watch()`) |
+| **Type-safety** | Rendah (bisa salah cast) | Menengah (dengan TypeAdapter) | Rendah (Map<String, dynamic>) | Sangat Tinggi (Generated Code) |
+| **Ukuran Boilerplate** | Sangat Kecil | Sedang (butuh code generation) | Besar (tulis query & mapper manual) | Besar (tapi otomatis digenerate) |
+| **Kemudahan Testing** | Mudah (`setMockInitialValues`) | Sedang (butuh inisialisasi path) | Sulit (butuh `sqflite_common_ffi`) | Sangat Mudah (In-memory database) |
+
+---
+
+## 2. Trade-off Setiap Pilihan
+
+- **SharedPreferences**: 
+  - *Kelebihan*: Sangat simpel, tidak perlu library eksternal yang berat.
+  - *Kekurangan*: Pembacaan dan penulisan asinkron untuk seluruh file XML/JSON di platform native. Tidak cocok untuk menyimpan objek atau list besar karena melambat seiring bertambahnya ukuran data.
+- **Hive**:
+  - *Kelebihan*: Sangat cepat (berjalan dalam memori) dan mendukung observasi UI secara langsung (`ValueListenable`).
+  - *Kekurangan*: Data disimpan dalam file binary per *box*. Saat ukuran file membesar dan butuh pencarian/filter kompleks, Hive akan membaca seluruh data ke memori. Tidak memiliki fitur relasi bawaan (Foreign Key).
+- **sqflite**:
+  - *Kelebihan*: Menggunakan engine SQLite yang sudah teruji. Sangat powerful untuk manipulasi data kompleks, pengurutan, dan paginasi (cocok untuk 1000+ data).
+  - *Kekurangan*: Banyak menulis kode boilerplate. Anda harus mengurus konversi Map ke objek Dart secara manual. Rentan error karena query SQL berbentuk String (tidak ada peringatan saat *compile-time*). Tidak reaktif (harus buat sistem Stream/BLoC manual agar UI update saat data berubah).
+- **Drift (sebelumnya Moor)**:
+  - *Kelebihan*: Abstraksi luar biasa di atas SQLite. Anda mendapat kekuatan SQLite dengan *type-safety* 100% menggunakan Dart. Mendukung reaktivitas (`watch()` untuk Stream) sehingga UI bisa langsung *rebuild* tanpa state management rumit. Sangat *scalable*.
+  - *Kekurangan*: Setup awal butuh pembelajaran. Bergantung pada `build_runner` untuk *code generation*, yang bisa memperlambat proses *build*.
+
+---
+
+## 3. Rekomendasi Final
+
+| Kebutuhan | Rekomendasi Teknologi | Alasan Utama |
+| :--- | :--- | :--- |
+| **Preferensi Tema (Dark/Light)** | **SharedPreferences** | Data preferensi hanya berupa pasangan *key-value* sederhana (misal: `isDarkMode: true`). Menggunakan database kompleks berlebihan untuk ini. *SharedPreferences* sempurna untuk menyimpan konfigurasi UI. |
+| **Data Catatan (1000+ records)** | **Drift** | Dengan 1000+ catatan, Anda membutuhkan pencarian (*search*) yang efisien, *sorting* (berdasarkan tanggal, dll.), dan mungkin pagination. **Drift** menawarkan kekuatan SQL untuk query yang efisien tanpa mengorbankan **reaktivitas** (Stream UI langsung berubah saat ada CRUD) dan **type-safety** (bebas dari error typo String SQL). |
+
+> [!TIP]
+> Jika Anda enggan mempelajari abstraksi SQL pada Drift dan ingin solusi yang lebih cepat dibuat, **Hive** adalah opsi ke-2 terbaik untuk menyimpan Notes asalkan Anda tidak membutuhkan relasi antar-entitas (misal: Catatan *belongs_to* Kategori).
+
+---
+
+## 4. Skema Tabel untuk 1000+ Catatan (Menggunakan SQLite/Drift)
+
+Untuk menangani 1000+ data catatan dengan efisien, kita perlu memastikan kolom yang sering dipakai untuk *sorting* atau *filtering* diberikan **Index**.
+
+### Skema Visual (ERD / Tabel)
+
+```mermaid
+erDiagram
+    NOTES {
+        integer id PK "Auto Increment"
+        string title "Not Null"
+        string content "Bisa Null"
+        boolean is_pinned "Default: false"
+        integer color_code "Menyimpan Hex Color"
+        datetime created_at "Default: now()"
+        datetime updated_at "Index: Untuk sorting"
+    }
+```
+
+### Implementasi pada Drift (Dart)
+
+Jika Anda menggunakan Drift, struktur tabelnya kurang lebih akan terlihat seperti ini di Dart:
+
+```dart
+import 'package:drift/drift.dart';
+
+// Mendefinisikan tabel Notes
+class Notes extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get title => text().withLength(min: 1, max: 255)();
+  TextColumn get content => text().nullable()();
+  BoolColumn get isPinned => boolean().withDefault(const Constant(false))();
+  IntColumn get colorCode => integer().nullable()();
+  
+  // Tanggal untuk sorting & filtering
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().nullable()();
+  
+  // Menambahkan INDEX di level tabel SQLite agar query "Terbaru" atau pencarian lebih cepat untuk 1000+ rows
+  @override
+  List<Set<Column>> get customUniqueIndexes => [
+    {updatedAt}, // Index untuk sorting berdasarkan update terakhir
+  ];
+}
+```
+
+Dengan indeks pada `updatedAt`, query seperti *'tampilkan catatan yang paling baru diedit'* tidak perlu melakukan scan penuh ke seluruh 1000+ data, melainkan cukup membaca dari pohon B-Tree indeksnya SQLite, sehingga aplikasi tetap responsif.
