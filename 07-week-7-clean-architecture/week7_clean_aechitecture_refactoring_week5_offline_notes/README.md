@@ -57,3 +57,17 @@ Hasil pencarian menemukan dua penggunaan NoteRepository() secara langsung, yaitu
 ## Gambar struktur target
 ![screenshot](screenshot/Praktikum%201.4.png)<br>
 
+# PRAKTIKUM 2
+## Verifikasi Akses Langsung pada Presentation Layer
+![screenshot](screenshot/Praktikum%203.1.png)<br>
+Hasil pencarian tidak menemukan penggunaan Dio, openDatabase, getDatabasesPath, FlutterSecureStorage, SharedPreferences.getInstance, maupun jsonDecode. Dengan demikian, berdasarkan pola yang diperiksa, bagian presentation tidak melakukan akses langsung terhadap sumber data.<br>
+
+## Verifikasi Dependency pada Domain Layer
+![screenshot](screenshot/Praktikum%203.2.png)<br>
+Pada pemeriksaan dependency, dilakukan pencarian import Flutter, Dio, Sqflite, dan Firebase pada bagian Domain dan Core. Hasil pencarian tidak menemukan import tersebut. Dengan demikian, berdasarkan pemeriksaan ini, Domain dan Core tidak memiliki dependency langsung terhadap teknologi tersebut<br>
+
+## Flutter Analyze dan Flutter Test
+![screenshot](screenshot/Praktikum%203.3.png)<br>
+
+## Hasil Praktikum 3
+![screenshot](screenshot/Praktikum%203.4.jpeg)<br>
