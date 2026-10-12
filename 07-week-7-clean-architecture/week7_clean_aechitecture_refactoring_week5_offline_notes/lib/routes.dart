@@ -5,10 +5,7 @@ import 'features/announcements/presentation/pages/announcements_page.dart';
 
 final GoRouter appRouter = GoRouter(
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const NotesPage(),
-    ),
+    GoRoute(path: '/', builder: (context, state) => const NotesPage()),
     GoRoute(
       path: '/announcements',
       builder: (context, state) => const AnnouncementsPage(),
