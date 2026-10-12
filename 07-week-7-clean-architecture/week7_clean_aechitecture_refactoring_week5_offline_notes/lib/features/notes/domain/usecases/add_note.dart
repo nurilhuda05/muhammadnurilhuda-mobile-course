@@ -12,11 +12,11 @@ class AddNote {
     String body = '',
   }) async {
     if (title.trim().isEmpty) {
-      return (note: null, failure: const LocalFailure('Judul tidak boleh kosong'));
+      return (
+        note: null,
+        failure: const LocalFailure('Judul tidak boleh kosong'),
+      );
     }
-    return _repository.addNote(
-      title: title,
-      body: body,
-    );
+    return _repository.addNote(title: title, body: body);
   }
 }

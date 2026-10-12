@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+
 import '../../../../core/failures.dart';
 import '../../domain/entities/announcement.dart';
 import '../../domain/repositories/announcement_repository.dart';
@@ -11,13 +12,13 @@ class AnnouncementRepositoryImpl implements AnnouncementRepository {
 
   @override
   Future<({List<Announcement> announcements, Failure? failure})>
-      fetchAnnouncements() async {
+  fetchAnnouncements() async {
     try {
       final db = await _openDb();
-      final rows =
-          await db.query('announcements', orderBy: 'created_at DESC');
-      final announcements =
-          rows.map((r) => AnnouncementModel.fromMap(r).toEntity()).toList();
+      final rows = await db.query('announcements', orderBy: 'created_at DESC');
+      final announcements = rows
+          .map((r) => AnnouncementModel.fromMap(r).toEntity())
+          .toList();
       return (announcements: announcements, failure: null);
     } catch (e) {
       return (
