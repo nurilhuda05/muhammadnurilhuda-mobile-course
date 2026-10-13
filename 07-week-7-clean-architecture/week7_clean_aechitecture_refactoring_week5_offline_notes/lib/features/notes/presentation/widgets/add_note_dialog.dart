@@ -45,14 +45,21 @@ class _AddNoteDialogState extends ConsumerState<AddNoteDialog> {
         ),
         ElevatedButton(
           onPressed: () async {
-            await ref
+            final result = await ref
                 .read(addNoteProvider)
                 .call(title: titleController.text, body: bodyController.text);
 
-            if (context.mounted) {
-              Navigator.pop(context);
-              ref.invalidate(notesProvider);
+            if (!context.mounted) return;
+
+            if (result.failure != null) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(result.failure!.message)));
+              return;
             }
+
+            Navigator.pop(context);
+            ref.invalidate(notesProvider);
           },
           child: const Text('Simpan'),
         ),
