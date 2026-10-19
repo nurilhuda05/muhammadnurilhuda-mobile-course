@@ -212,7 +212,21 @@ Alasan teknis:
 ![screenshot](screenshot/refactoring/1.png)
 
 #### 2.	Langkah Manual Uji Fitur Validasi Judul Kosong
-![screenshot](screenshot/refactoring/2.png)<br>
+![screenshot](screenshot/refactoring/2.jpg)<br>
 Uji manual dilakukan dengan menjalankan aplikasi menggunakan perintah flutter run, lalu membuka dialog Tambah Catatan. Kolom judul dikosongkan dan hanya kolom isi yang diisi, kemudian tombol Simpan ditekan. Sebelum perbaikan, dialog langsung menutup tanpa pesan apa pun dan catatan tidak muncul di daftar, sehingga pengguna tidak mengetahui penyebab kegagalan. Setelah perbaikan, dialog tetap terbuka dan muncul pesan Judul tidak boleh kosong di bagian bawah layar melalui SnackBar. Catatan juga tidak tersimpan ke daftar. Hasil ini membuktikan validasi pada use case AddNote bekerja dan kegagalannya kini ditampilkan kepada pengguna.
 
 
+
+
+# REFLEKSI
+#### 1.	Apa beda LGTM buta dengan approve yang bertanggung jawab? Apa risikonya bagi tim?
+LGTM buta berarti menyetujui perubahan tanpa membaca diff, tanpa menjalankan kode, dan tanpa menguji perilakunya. Approve yang bertanggung jawab berarti reviewer membaca perubahan, menjalankan kode, memeriksa kasus gagal, dan baru menyetujui setelah yakin. Risiko LGTM buta bagi tim adalah bug lolos ke develop, kualitas kode menurun, dan reviewer ikut menanggung kesalahan yang tidak ia periksa. Dari praktikum ini saya memahami bahwa mesin seperti CI sekalipun hanya menangkap masalah yang mekanis, sehingga penilaian logika tetap membutuhkan reviewer yang sungguh-sungguh membaca.
+
+#### 2.	Kapan komentar wajib berstatus request changes, dan kapan cukup saran?
+Request changes wajib digunakan ketika temuan dapat merusak perilaku atau aturan penting, misalnya bug logika, kegagalan yang tidak ditangani, pelanggaran dependency rule, atau perubahan perilaku tanpa test. Saran cukup digunakan untuk perbaikan yang bersifat peningkatan kualitas dan tidak menimbulkan kesalahan, misalnya penamaan, refactor kecil, atau berbagi fake antar test. Sebagai contoh, temuan AI bahwa dialog mengabaikan failure saya anggap blocker karena pengguna tidak mendapat umpan balik, sedangkan usulan ValidationFailure hanya saran.
+
+#### 3.	Bagian mana dari review AI yang Anda tolak atau sederhanakan, dan mengapa?
+Saya menolak usulan membuat subclass ValidationFailure. Alasannya, baru ada satu jenis validasi sehingga penambahan kelas tergolong berlebihan. Selain itu, Failure adalah sealed class, sehingga penambahan subclass dapat memengaruhi switch di bagian lain, dan usulan ini melebar dari cakupan PR yang dirancang kecil. Saya juga menunda usulan men-trim judul dan berbagi FakeNoteRepository karena berada di luar cakupan perubahan. Dari sini saya belajar bahwa saran AI perlu diverifikasi dan tidak otomatis diterapkan.
+
+#### 4.	Satu hal konkret yang Anda perbaiki setelah review, dan apa dampaknya?
+Saya memperbaiki add_note_dialog.dart agar memeriksa result.failure dan menampilkan SnackBar tanpa menutup dialog. Sebelumnya, dialog menutup tanpa pesan sehingga pengguna tidak tahu penyebab catatan tidak tersimpan. Setelah perbaikan, pesan “Judul tidak boleh kosong” muncul dan pengguna dapat langsung memperbaiki input. Saya juga menambah dua test untuk AddNote sehingga jumlah test menjadi 7 dan validasi kini terlindungi dari regresi.
