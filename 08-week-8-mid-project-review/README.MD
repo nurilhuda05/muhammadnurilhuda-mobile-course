@@ -133,35 +133,35 @@ level (blocker/saran), file dan baris, alasan, dan usulan potongan kode perbaika
 #### 1.	BLOCKER — UI tidak menangani failure dari use case
 File: add_note_dialog.dart
 Alasan: Dialog langsung Navigator.pop setelah memanggil addNote, tanpa memeriksa result.failure. Jika user mengirim judul kosong, validasi di use case mengembalikan Failure, tapi dialog tetap menutup tanpa feedback apapun validasi jadi sia-sia.<br>
-Usulan perbaikan:
+Usulan perbaikan:<br>
 ![screenshot](screenshot/ai-challenge/1.png)
 
 #### 2.	BLOCKER — Tidak ada unit test untuk AddNote use case
 File: Folder test/
 Alasan: Test yang ada hanya menguji GetNotes (use case) dan NoteRepositoryImpl (data layer). Perubahan inti — yaitu validasi title.trim().isEmpty di AddNote — sama sekali belum punya test. Ini artinya regresi bisa masuk tanpa terdeteksi. FakeNoteRepository di get_notes_test.dart sudah meng-implement addNote tapi hanya throw UnimplementedError().<br>
-Usulan perbaikan (file baru test/add_note_test.dart):
+Usulan perbaikan (file baru test/add_note_test.dart):<br>
 ![screenshot](screenshot/ai-challenge/2.png)
 
 #### 3.	SARAN — Use case meneruskan title tanpa di-trim ke repository
 File: add_note.dart (baris 20)
 Alasan: Validasi menggunakan title.trim().isEmpty, artinya " Halo " lolos validasi (benar), tapi string asli termasuk spasi leading/trailing diteruskan ke repository dan disimpan ke DB. Ini inkonsisten — kalau whitespace dianggap tidak bermakna untuk validasi, seharusnya juga di-trim sebelum disimpan.<br>
-Usulan perbaikan:
+Usulan perbaikan:<br>
 ![screenshot](screenshot/ai-challenge/3.png) 
 
 #### 4.	SARAN — Failure bisa dibuatkan subclass ValidationFailure agar domain lebih ekspresif
 File: failures.dart & add_note.dart (baris 17)
 Alasan: Saat ini validasi mengembalikan LocalFailure, yang semantiknya sama dengan kegagalan database. Presentation layer tidak bisa membedakan "judul kosong" (tampilkan inline error) vs "database rusak" (tampilkan snackbar/dialog). Dengan sealed class, menambah subclass tetap exhaustive-safe.<br>
-Usulan perbaikan pada failures.dart:
+Usulan perbaikan pada failures.dart:<br>
 ![screenshot](screenshot/ai-challenge/4.png)<br>
-Lalu di add_note.dart:
+Lalu di add_note.dart:<br>
 ![screenshot](screenshot/ai-challenge/5.png)<br>
-Ini memungkinkan pattern matching di UI:
+Ini memungkinkan pattern matching di UI:<br>
 ![screenshot](screenshot/ai-challenge/6.png)
 
 #### 5.	SARAN — FakeNoteRepository diduplikasi, sebaiknya di-share
 File: get_notes_test.dart (baris 7–31)
 Alasan: FakeNoteRepository saat ini terdefinisi langsung di file test GetNotes. Ketika nanti dibuat test untuk AddNote (temuan #2), fake ini perlu diduplikasi atau dibuat versi baru. Lebih baik diekstrak ke file shared agar konsisten dan DRY.<br>
-Usulan perbaikan:
+Usulan perbaikan:<br>
 ![screenshot](screenshot/ai-challenge/7.png)
 
 
@@ -203,4 +203,16 @@ Alasan teknis:
 - LocalFailure dengan pesan yang jelas sudah cukup, terbukti dari SnackBar yang menampilkan “Judul tidak boleh kosong” saat diuji.
 #### 6.	Flutter Analyze dan Flutter Test
 ![screenshot](screenshot/ai-challenge/8.png)
+
+
+
+
+# REFACTORING CHALLENGE
+#### 1.	Flutter Analyze dan Flutter Test
+![screenshot](screenshot/refactoring/1.png)
+
+#### 2.	Langkah Manual Uji Fitur Validasi Judul Kosong
+![screenshot](screenshot/refactoring/2.png)<br>
+Uji manual dilakukan dengan menjalankan aplikasi menggunakan perintah flutter run, lalu membuka dialog Tambah Catatan. Kolom judul dikosongkan dan hanya kolom isi yang diisi, kemudian tombol Simpan ditekan. Sebelum perbaikan, dialog langsung menutup tanpa pesan apa pun dan catatan tidak muncul di daftar, sehingga pengguna tidak mengetahui penyebab kegagalan. Setelah perbaikan, dialog tetap terbuka dan muncul pesan Judul tidak boleh kosong di bagian bawah layar melalui SnackBar. Catatan juga tidak tersimpan ke daftar. Hasil ini membuktikan validasi pada use case AddNote bekerja dan kegagalannya kini ditampilkan kepada pengguna.
+
 
