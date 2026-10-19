@@ -1,5 +1,5 @@
 # PRAKTIKUM 1
-1. **Audit Riwayat**<br>
+### 1. Audit Riwayat
 ![screenshot](screenshot/praktikum-1/1.png)<br>
 **a. Commit langsung ke main**<br>
 Seluruh 15 commit berada di branch main. Tidak ada branch develop maupun feature/*. Dampaknya, tidak ada tahap review sebelum kode masuk ke branch utama.<br>
@@ -10,7 +10,7 @@ Tidak ditemukan. Repository hanya memiliki branch main, sehingga belum menerapka
 **d. File untracked**<br>
 Tidak ditemukan. Hasil git status menunjukkan working tree clean.<br>
 
-2. **Buat branch kerja yang benar**<br>
+### 2. Buat branch kerja yang benar
 **a. Buat branch develop dari main**<br>
 - git checkout -b develop<br>
 ![screenshot](screenshot/praktikum-1/2.png)<br>
@@ -41,16 +41,16 @@ Perintah ini menyimpan perubahan yang sudah di-staging ke riwayat Git dengan pes
 ![screenshot](screenshot/praktikum-1/9.png)<br>
 Perintah ini mengirim branch feat/notes-validation dari laptop ke GitHub (origin). Opsi -u menghubungkan branch lokal dengan branch di GitHub sehingga selanjutnya cukup memakai git push. Hasil [new branch] feat/notes-validation -> feat/notes-validation menandakan push berhasil dan branch siap dibuatkan Pull Request<br>
 
-3. **Perbaiki satu commit buruk (simulasi)**<br>
+### 3. Perbaiki satu commit buruk (simulasi)
 a. **Sebelum**: Mengcopy projek minggu ke 5 ke project minggu 7<br>
 **Sesudah**: chore(week7): salin project minggu 5 sebagai dasar refactoring<br>
 **Alasan**: pesan lama sudah menjelaskan isi, tetapi belum memakai tipe dan scope. Tipe chore tepat karena ini tugas pendukung, bukan fitur.<br>
 
-b.	**Sebelum**: Memperbaiki Tampilan Readme<br>
+b. **Sebelum**: Memperbaiki Tampilan Readme<br>
 **Sesudah**: docs(readme): rapikan tampilan dan format README<br>
 **Alasan**: tipe docs langsung menunjukkan perubahan dokumentasi, dan scope readme menunjukkan lokasinya.<br>
 
-c.	**Sebelum**: Menghapus isi screenshot dan readme<br>
+c. **Sebelum**: Menghapus isi screenshot dan readme<br>
 **Sesudah**: docs(readme): hapus isi README dan screenshot lama<br>
 **Alasan**: pesan lama tidak memakai tipe. Tipe docs dan scope readme membuat jenis dan lokasi perubahan langsung terbaca<br>
 
