@@ -74,3 +74,31 @@ Setelah PR di merge ke develop, issue nomor 1 ditutup secara manual dengan statu
 ![screenshot](screenshot/praktikum-2/4.png)<br>
 Perintah git checkout develop digunakan untuk pindah ke branch develop di laptop. Perintah git pull origin develop kemudian mengambil hasil merge terbaru dari GitHub. Hasilnya berupa Fast forward dari commit 52a7496 ke 7ae69be tanpa konflik. Satu file berubah, yaitu add_note.dart, dengan 4 penambahan dan 1 penghapusan. Ini menunjukkan perubahan dari branch fitur sudah masuk ke develop dan develop di laptop sama dengan yang ada di GitHub.
 
+
+
+
+# PRAKTIKUM 3
+#### 1.	Hasil Pemeriksaan Mesin
+![screenshot](screenshot/praktikum-3/1.png)<br>
+Perintah dart format dijalankan pada folder lib dan test, dengan hasil Formatted 26 files dan 0 changed. Artinya seluruh file sudah rapi. Sebelumnya perintah ini merapikan 23 file, dan perubahan tersebut sudah di merge ke develop melalui Pull Request terpisah. Folder build tidak ikut diperiksa karena berisi hasil kompilasi dan bukan kode sumber. Perintah flutter analyze menunjukkan hasil No issues found, yang berarti tidak ada error, warning, maupun saran perbaikan pada kode. Perintah flutter test menunjukkan hasil All tests passed dengan 5 test, yang membuktikan bahwa perubahan format dan penambahan validasi judul kosong tidak merusak perilaku aplikasi.
+
+#### 2.	Hasil Pull Request Format Kode
+![screenshot](screenshot/praktikum-3/2.png)<br>
+Pull Request nomor 3 dibuat dari branch chore/format-code ke branch develop untuk merapikan 23 file hasil dart format. Isi perubahan hanya format, tanpa perubahan logika. Status Merged menunjukkan perubahan sudah masuk ke develop melalui alur Pull Request sesuai Git Flow.
+
+#### 3.	Hasil CI pada Pull Request
+![screenshot](screenshot/praktikum-3/3.png)<br>
+![screenshot](screenshot/praktikum-3/4.png)<br>
+Workflow CI ci.yml dijalankan otomatis pada setiap Pull Request dan menjalankan flutter pub get, flutter analyze, serta flutter test. Run pertama gagal karena folder tmp_test_project, yaitu sisa percobaan yang ikut ter commit dan berisi test bawaan yang rusak. Setelah folder tersebut dihapus lewat commit kedua, job verify berhasil dalam waktu sekitar 1 menit 33 detik dan seluruh pemeriksaan lolos. Hal ini membuktikan CI mampu menangkap masalah yang tidak terlihat di laptop sebelum kode digabung.
+
+#### 4.	Hasil Pull Request CI Setelah Merge
+![screenshot](screenshot/praktikum-3/5.png)<br> 
+Pull Request nomor 4 berhasil di merge ke branch develop dengan dua commit. Commit pertama menambahkan workflow CI dan ditandai gagal, sedangkan commit kedua menghapus folder tmp_test_project dan ditandai berhasil. Setelah merge, branch chore/add-ci dihapus agar daftar branch tetap pendek
+
+#### 5.	Hasil Update Branch Develop
+![screenshot](screenshot/praktikum-3/6.png)<br>
+Branch develop di laptop diperbarui dengan git pull origin develop dan menghasilkan Fast forward tanpa konflik. File ci.yml masuk ke develop dan folder tmp_test_project hilang dari Git. Hasil git log menunjukkan commit merge Pull Request nomor 3 dan nomor 4 dengan pesan commit berformat konvensional, dan HEAD pada develop sama dengan origin develop.
+
+#### 6.	Hasil Pemeriksaan Kesiapan Struktur
+![screenshot](screenshot/praktikum-3/7.png)<br>
+Pencarian import terlarang pada lapisan domain dan presentation tidak menemukan package Flutter, Dio, maupun SQLite. Pemeriksaan ulang dengan Get-ChildItem membaca empat file pada domain notes dan tetap tidak menemukan import terlarang. Dengan demikian dependency rule Clean Architecture terbukti dan struktur feature first siap dilanjutkan ke paruh kedua.
