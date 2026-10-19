@@ -1,7 +1,7 @@
 # PRAKTIKUM 1
 ### 1. Audit Riwayat
 ![screenshot](screenshot/praktikum-1/1.png)
-#### a. Commit langsung ke main<
+#### a. Commit langsung ke main
 Seluruh 15 commit berada di branch main. Tidak ada branch develop maupun feature/*. Dampaknya, tidak ada tahap review sebelum kode masuk ke branch utama.
 #### b. Pesan commit tidak deskriptif
 Beberapa pesan commit hanya menyebut waktu, bukan perubahan yang dilakukan, misalnya Praktikum 1 Minggu 7 (muncul 3 kali, satu di antaranya typo “MInggu”), Praktikum 2 Minggu 7, dan Memperbaiki Tampilan Readme (muncul 3 kali). Dampaknya, riwayat sulit dilacak dan sulit di-revert.
@@ -57,4 +57,20 @@ c. **Sebelum**: Menghapus isi screenshot dan readme<br>
 
 
 
+# PRAKTIKUM 2
+#### 1.	Membuat Issue
+![screenshot](screenshot/praktikum-2/1.png)<br>
+Issue dibuat di GitHub dengan judul Validasi judul kosong pada catatan dan diberi label bug. Isinya menjelaskan masalah, langkah reproduksi, dan hasil yang diharapkan. Issue ini mendapat nomor 1 dan menjadi awal dari seluruh alur kerja, sehingga setiap perubahan kode punya alasan yang jelas dan dapat dilacak.
+
+#### 2.	Membuat Pull Request
+![screenshot](screenshot/praktikum-2/2.png)<br>
+Pull Request dibuat dari branch fitur ke branch develop sesuai aturan Git Flow. Judulnya memakai format commit konvensional. Deskripsinya berisi masalah, solusi, dan cara uji, lalu diakhiri kata kunci Closes dengan nomor issue 1 agar PR terhubung ke issue. Perubahan hanya mencakup satu file dan satu fitur sehingga mudah direview.
+
+#### 3.	Hasil Setelah Close Issue
+![screenshot](screenshot/praktikum-2/3.png)<br>
+Setelah PR di merge ke develop, issue nomor 1 ditutup secara manual dengan status Close as completed. Penutupan otomatis tidak terjadi karena GitHub hanya menutup issue otomatis jika PR di merge ke default branch, yaitu main, sedangkan PR ini ditujukan ke develop. Status Closed menunjukkan masalah sudah selesai ditangani dan alur issue, branch, commit, PR, dan merge terdokumentasi dengan lengkap.
+
+#### 4.	Hasil Git Checkout Develop dan Git Pull Origin Develop
+![screenshot](screenshot/praktikum-2/4.png)<br>
+Perintah git checkout develop digunakan untuk pindah ke branch develop di laptop. Perintah git pull origin develop kemudian mengambil hasil merge terbaru dari GitHub. Hasilnya berupa Fast forward dari commit 52a7496 ke 7ae69be tanpa konflik. Satu file berubah, yaitu add_note.dart, dengan 4 penambahan dan 1 penghapusan. Ini menunjukkan perubahan dari branch fitur sudah masuk ke develop dan develop di laptop sama dengan yang ada di GitHub.
 
