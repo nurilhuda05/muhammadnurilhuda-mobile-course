@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/entities/note.dart';
 import '../providers/notes_providers.dart';
 import '../widgets/add_note_dialog.dart';
 import '../widgets/error_view.dart';
 import '../widgets/notes_list.dart';
 
-class NotesPage extends ConsumerWidget {
+List<Note> filterNotesByTitle(List<Note> notes, String query) {
+  final normalizedQuery = query.trim().toLowerCase();
+  return notes
+      .where((note) => note.title.toLowerCase().contains(normalizedQuery))
+      .toList();
+}
+
+class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NotesPage> createState() => _NotesPageState();
+}
+
+class _NotesPageState extends ConsumerState<NotesPage> {
+  String _query = '';
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(notesProvider);
 
     return Scaffold(
@@ -21,9 +36,35 @@ class NotesPage extends ConsumerWidget {
           message: '$e',
           onRetry: () => ref.invalidate(notesProvider),
         ),
-        data: (notes) => notes.isEmpty
-            ? const Center(child: Text('Belum ada catatan.'))
-            : NotesList(notes),
+        data: (notes) {
+          final filtered = filterNotesByTitle(notes, _query);
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  key: const Key('note-search-field'),
+                  onChanged: (value) => setState(() => _query = value),
+                  decoration: const InputDecoration(
+                    labelText: 'Cari judul catatan',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: filtered.isEmpty
+                    ? Center(
+                        child: Text(
+                          _query.trim().isEmpty
+                              ? 'Belum ada catatan.'
+                              : 'Catatan tidak ditemukan.',
+                        ),
+                      )
+                    : NotesList(filtered),
+              ),
+            ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
