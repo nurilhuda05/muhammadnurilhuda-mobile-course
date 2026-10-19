@@ -1,13 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-
 import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/core/failures.dart';
 import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/data/repositories/note_repository_impl.dart';
 
 void main() {
   sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;  
+  databaseFactory = databaseFactoryFfi;
 
   late Database db;
   late NoteRepositoryImpl repository;
@@ -29,9 +28,7 @@ void main() {
       },
     );
 
-    repository = NoteRepositoryImpl(
-      openDb: () async => db,
-    );
+    repository = NoteRepositoryImpl(openDb: () async => db);
   });
 
   tearDown(() async {
@@ -52,10 +49,7 @@ void main() {
   });
 
   test('fetchNotes mengambil catatan dari database', () async {
-    await repository.addNote(
-      title: 'Catatan Test',
-      body: 'Isi test',
-    );
+    await repository.addNote(title: 'Catatan Test', body: 'Isi test');
 
     final result = await repository.fetchNotes();
 

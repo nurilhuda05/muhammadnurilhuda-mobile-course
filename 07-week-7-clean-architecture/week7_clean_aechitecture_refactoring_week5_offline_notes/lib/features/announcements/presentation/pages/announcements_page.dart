@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../providers/announcements_providers.dart';
 import '../widgets/announcement_card.dart';
 
@@ -11,9 +12,7 @@ class AnnouncementsPage extends ConsumerWidget {
     final state = ref.watch(announcementsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pengumuman'),
-      ),
+      appBar: AppBar(title: const Text('Pengumuman')),
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../providers/notes_providers.dart';
 import '../widgets/add_note_dialog.dart';
 import '../widgets/error_view.dart';
@@ -13,12 +14,9 @@ class NotesPage extends ConsumerWidget {
     final state = ref.watch(notesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Catatan'),
-      ),
+      appBar: AppBar(title: const Text('Catatan')),
       body: state.when(
-        loading: () =>
-            const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => ErrorView(
           message: '$e',
           onRetry: () => ref.invalidate(notesProvider),

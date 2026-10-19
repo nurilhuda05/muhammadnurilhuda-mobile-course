@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../providers/notes_providers.dart';
 
 class AddNoteDialog extends ConsumerStatefulWidget {
@@ -29,15 +30,11 @@ class _AddNoteDialogState extends ConsumerState<AddNoteDialog> {
         children: [
           TextField(
             controller: titleController,
-            decoration: const InputDecoration(
-              labelText: 'Judul',
-            ),
+            decoration: const InputDecoration(labelText: 'Judul'),
           ),
           TextField(
             controller: bodyController,
-            decoration: const InputDecoration(
-              labelText: 'Isi',
-            ),
+            decoration: const InputDecoration(labelText: 'Isi'),
           ),
         ],
       ),
@@ -48,15 +45,21 @@ class _AddNoteDialogState extends ConsumerState<AddNoteDialog> {
         ),
         ElevatedButton(
           onPressed: () async {
-            await ref.read(addNoteProvider).call(
-                  title: titleController.text,
-                  body: bodyController.text,
-                );
+            final result = await ref
+                .read(addNoteProvider)
+                .call(title: titleController.text, body: bodyController.text);
 
-            if (context.mounted) {
-              Navigator.pop(context);
-              ref.invalidate(notesProvider);
+            if (!context.mounted) return;
+
+            if (result.failure != null) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(result.failure!.message)));
+              return;
             }
+
+            Navigator.pop(context);
+            ref.invalidate(notesProvider);
           },
           child: const Text('Simpan'),
         ),
