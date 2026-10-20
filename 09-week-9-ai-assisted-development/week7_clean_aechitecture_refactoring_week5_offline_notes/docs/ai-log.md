@@ -125,3 +125,27 @@ Saya menjalankan `flutter test` untuk seluruh proyek dan hasilnya 12 test lulus.
 
 #### 5. Akar Masalah
 Akar masalah yang saya temukan adalah celah pengujian, yaitu cabang "Catatan tidak ditemukan." sudah berfungsi benar tetapi belum memiliki test otomatis. Temuan ini bukan bug logika sehingga saya tidak mengubah kode. Saya menutup celah tersebut dengan menambahkan widget test.
+
+
+
+## Refactor ke Layer yang Benar
+#### 1. Kondisi Sebelum Refactor
+![screenshot](../screenshot/praktikum3/3.png)<br>
+Sebelum refactor, fungsi `filterNotesByTitle` berada di `notes_page.dart` (lapisan presentation), sedangkan aturan filter seharusnya berada di use case domain. Saya juga mengukur bahwa file `notes_page.dart` berisi 80 baris dan method `build` berukuran 52 baris (baris 20-71), melebihi batas 40 baris dari modul. Pengecekan database dari widget menunjukkan tidak ada panggilan SQLite pada `pages/` maupun `widgets/`. Import `database_helper.dart` pada `notes_providers.dart` hanya berfungsi sebagai wiring repository.
+
+#### 2. Use Case SearchNotes di Domain
+Saya memindahkan aturan filter ke use case `SearchNotes` pada `domain/usecases/search_notes.dart`. Use case ini murni Dart dan disambungkan ke presentation melalui `searchNotesProvider`. Fungsi `filterNotesByTitle` saya hapus dari `notes_page.dart`, dan kontrak `NoteRepository` tidak saya ubah. Test saya arahkan ke `SearchNotes`, sehingga jumlah test tetap 12.
+
+#### 3. Pemecahan Method build
+Saya memecah `build` dengan membuat widget `NotesSearchField` dan `NotesEmptyState`. Panjang `build` turun dari 52 baris menjadi 41 baris setelah `NotesSearchField`, lalu menjadi 36 baris setelah `NotesEmptyState`. Setelah `dart format`, panjangnya menjadi 37 baris (baris 22-58), sudah di bawah batas 40 baris.
+
+#### 4. Pengecekan Batas Layer
+![screenshot](../screenshot/praktikum3/4.png)<br>
+Pencarian `flutter|dio|sqflite` pada folder `domain/` menghasilkan keluaran kosong, sehingga domain bebas dari Flutter, Dio, dan SQLite. Pencarian `sqflite|database_helper|dio` pada `pages/` dan `widgets/` juga kosong, sehingga tidak ada panggilan database dari widget.
+
+
+
+## Verifikasi Akhir
+#### 5. Hasil analyze, format, dan test
+![screenshot](../screenshot/praktikum3/5.png)<br>
+Saya menjalankan `flutter analyze` dan hasilnya No issues found. Saya menjalankan `dart format --set-exit-if-changed lib test` hingga tidak ada file yang berubah. Saya juga menjalankan `flutter test` dan hasilnya 12 test lulus. Pada proyek ini `dart format` saya batasi ke folder `lib` dan `test`, karena perintah `dart format .` gagal membaca path di folder `build/` (hasil kompilasi Android) dan bukan karena kode saya.
