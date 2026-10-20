@@ -19,6 +19,10 @@ void main() {
     expect(filterNotesByTitle(notes, ' ').length, 2);
   });
 
+  test('query tak cocok kembalikan kosong', () {
+    expect(filterNotesByTitle(notes, 'zzz-tak-ada'), isEmpty);
+  });
+
   testWidgets('empty state tampil saat belum ada notes', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
