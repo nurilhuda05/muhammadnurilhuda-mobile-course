@@ -1,4 +1,6 @@
-# PROMT
+# PRAKTIKUM 2
+
+## Promt
 
 PERAN:
 Kamu adalah senior Flutter developer.
@@ -73,7 +75,7 @@ OUTPUT:
 - Cara menguji fitur.
 
 
-# HASIL AI
+## Hasil AI
 
 Fitur pencarian judul selesai. Pencarian berjalan di memori pada daftar notes yang sudah dimuat; widget tidak mengakses SQLite dan kontrak NoteRepository tidak berubah.
 
@@ -82,7 +84,7 @@ Tiga test—pencarian tanpa membedakan kapitalisasi, query kosong, dan widget te
 Validasi: flutter test lulus (10 test); flutter analyze tidak menemukan masalah.
 
 
-# VERIFIKASI HASIL AI
+## Verifikasi Hasil AI
 #### 1. Uji Manual: Query Kosong
 ![screenshot](../screenshot/praktikum2/1.jpeg)<br>
 Saat kolom pencarian kosong, semua catatan tampil.
@@ -102,3 +104,23 @@ Muncul empty state "Catatan tidak ditemukan.".
 #### 5. Bukti 1 dan 2: Celah Arsitektur dan Celah Test
 ![screenshot](../screenshot/praktikum2/5.png)<br>
 Pencarian `filterNotesByTitle` menunjukkan fungsi berada di `notes_page.dart` (lapisan presentation), padahal seharusnya di use case domain. Pencarian `tidak ditemukan` di folder `test` hasilnya kosong, artinya teks "Catatan tidak ditemukan." belum punya widget test.
+
+
+# PRAKTIKUM 3
+## Debug dengan Test Merah
+#### 1. Reproduksi
+Saya melakukan reproduksi dengan membuka halaman Catatan, kemudian mengetikkan `zzz-tak-ada` pada kolom pencarian. Hasil yang saya harapkan adalah tampilnya teks "Catatan tidak ditemukan.", dan hasil yang saya amati pada layar sesuai dengan harapan tersebut.
+
+#### 2. Isolasi
+Bagian yang saya isolasi adalah fungsi `filterNotesByTitle` pada `notes_page.dart` baris 10. Fungsi ini bersifat murni sehingga dapat saya uji langsung tanpa UI melalui unit test. Adapun pemilihan teks empty state di dalam `build` belum teruji dan memerlukan widget test.
+
+#### 3. Test Widget Empty State
+![screenshot](../screenshot/praktikum3/1.png)<br>
+Saya menambahkan widget test `query tak cocok menampilkan empty state` pada `test/notes_search_test.dart`. Hasil pengujian menunjukkan seluruh test pada file tersebut lulus (5 test). Test tidak berstatus merah karena saya tidak menemukan bug logika pada kode.
+
+#### 4. Hasil Mesin: flutter test dan flutter analyze
+![screenshot](../screenshot/praktikum3/2.png)<br>
+Saya menjalankan `flutter test` untuk seluruh proyek dan hasilnya 12 test lulus. Saya juga menjalankan `flutter analyze` dan tidak ditemukan masalah (No issues found).
+
+#### 5. Akar Masalah
+Akar masalah yang saya temukan adalah celah pengujian, yaitu cabang "Catatan tidak ditemukan." sudah berfungsi benar tetapi belum memiliki test otomatis. Temuan ini bukan bug logika sehingga saya tidak mengubah kode. Saya menutup celah tersebut dengan menambahkan widget test.
