@@ -234,4 +234,4 @@ Keputusan yang paling sulit adalah menolak temuan review AI nomor 2 tentang penc
 
 
 # HASIL AKHIR
-![screenshot](/screenshot/HasilAkhir.png)
+![screenshot](screenshot/HasilAkhir.png)
