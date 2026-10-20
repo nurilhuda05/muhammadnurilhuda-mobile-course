@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../domain/entities/note.dart';
 import '../providers/notes_providers.dart';
 import '../widgets/add_note_dialog.dart';
 import '../widgets/error_view.dart';
 import '../widgets/notes_list.dart';
 
-List<Note> filterNotesByTitle(List<Note> notes, String query) {
-  final normalizedQuery = query.trim().toLowerCase();
-  return notes
-      .where((note) => note.title.toLowerCase().contains(normalizedQuery))
-      .toList();
-}
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
@@ -37,7 +29,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           onRetry: () => ref.invalidate(notesProvider),
         ),
         data: (notes) {
-          final filtered = filterNotesByTitle(notes, _query);
+          final filtered = ref.read(searchNotesProvider)(notes, _query);
           return Column(
             children: [
               Padding(

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/domain/entities/note.dart';
 import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/presentation/pages/notes_page.dart';
 import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/presentation/providers/notes_providers.dart';
+import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/domain/usecases/search_notes.dart';
 
 void main() {
   final notes = [
@@ -11,16 +12,18 @@ void main() {
     Note(title: 'Kuliah Flutter', updatedAt: DateTime(2026)),
   ];
 
+  const searchNotes = SearchNotes();
+
   test('pencarian judul tidak peka huruf besar-kecil', () {
-    expect(filterNotesByTitle(notes, 'FLUTter').single.title, 'Kuliah Flutter');
+    expect(searchNotes(notes, 'FLUTter').single.title, 'Kuliah Flutter');
   });
 
   test('query kosong menampilkan semua notes', () {
-    expect(filterNotesByTitle(notes, ' ').length, 2);
+    expect(searchNotes(notes, ' ').length, 2);
   });
 
   test('query tak cocok kembalikan kosong', () {
-    expect(filterNotesByTitle(notes, 'zzz-tak-ada'), isEmpty);
+    expect(searchNotes(notes, 'zzz-tak-ada'), isEmpty);
   });
 
   testWidgets('empty state tampil saat belum ada notes', (tester) async {

@@ -6,10 +6,16 @@ import '../../domain/usecases/get_notes.dart';
 import '../../domain/entities/note.dart';
 import '../../../../core/database/database_helper.dart';
 import '../../domain/usecases/add_note.dart';
+import '../../domain/usecases/search_notes.dart';
 
 // Data layer: database opener disuntikkan (mudah diganti fake saat test)
 final noteRepositoryProvider = Provider<NoteRepository>((ref) {
   return NoteRepositoryImpl(openDb: openNotesDb);
+});
+
+// Domain layer: use case menerima abstraksi, bukan implementasi
+final searchNotesProvider = Provider<SearchNotes>((ref) {
+  return const SearchNotes();
 });
 
 // Domain layer: use case menerima abstraksi, bukan implementasi
