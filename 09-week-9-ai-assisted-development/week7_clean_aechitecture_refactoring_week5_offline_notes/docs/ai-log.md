@@ -149,3 +149,34 @@ Pencarian `flutter|dio|sqflite` pada folder `domain/` menghasilkan keluaran koso
 #### 5. Hasil analyze, format, dan test
 ![screenshot](../screenshot/praktikum3/5.png)<br>
 Saya menjalankan `flutter analyze` dan hasilnya No issues found. Saya menjalankan `dart format --set-exit-if-changed lib test` hingga tidak ada file yang berubah. Saya juga menjalankan `flutter test` dan hasilnya 12 test lulus. Pada proyek ini `dart format` saya batasi ke folder `lib` dan `test`, karena perintah `dart format .` gagal membaca path di folder `build/` (hasil kompilasi Android) dan bukan karena kode saya.
+
+
+
+# AI PROMPT CHALLENGE
+
+## Prompt
+Review kode search Flutter ini sebagai seniordev.
+
+Konteks: feature-first (presentation -> domain <- data), Riverpod, SQLite + Dio.
+
+Fokus: kebenaran, arsitektur, test. Abaikan style.
+
+Beri 3 temuan + level blocker/saran + alasan.
+
+## Hasil
+Review statis: tidak ada temuan blocker, tetapi ada tiga saran yang layak ditangani.
+
+#### Temuan 1
+- Level: Saran
+- Lokasi: `notes_page.dart`
+- Temuan dan alasan: Query bisa tidak cocok dengan isi kolom pencarian setelah pemulihan error. `_query` disimpan di state halaman, tetapi `TextField` tidak memakai controller. Jika pemuatan catatan gagal setelah pencarian, field diganti tampilan error; saat retry berhasil, field dibuat ulang dalam keadaan kosong sementara daftar tetap difilter memakai `_query` lama. Simpan dan pulihkan nilai input melalui controller atau reset query saat state berubah.
+
+#### Temuan 2
+- Level: Saran
+- Lokasi: `search_notes.dart`, `note_repository_impl.dart`
+- Temuan dan alasan: Pencarian selalu memindai seluruh catatan di memori. Repository mengambil semua baris SQLite, lalu use case memeriksa judul untuk setiap input keystroke. Ini sederhana dan wajar untuk jumlah catatan kecil, tetapi biaya baca dan filter meningkat seiring ukuran data. Jika jumlah catatan dapat bertambah besar, pertimbangkan meneruskan query melalui use case/repository dan melakukan pencarian di SQLite.
+
+#### Temuan 3
+- Level: Saran
+- Lokasi: `notes_search_test.dart`
+- Temuan dan alasan: Belum ada widget test untuk hasil pencarian yang cocok. Test unit memeriksa pencocokan use case, tetapi widget test hanya mencakup daftar kosong dan query tanpa hasil. Tambahkan test yang memastikan query cocok menampilkan catatan yang benar dan menyembunyikan catatan lain agar wiring UI ikut teruji.
