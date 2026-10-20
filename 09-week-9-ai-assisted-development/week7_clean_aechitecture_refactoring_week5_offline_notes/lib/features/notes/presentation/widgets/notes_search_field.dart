@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
 class NotesSearchField extends StatelessWidget {
-  const NotesSearchField({super.key, required this.onChanged});
+  const NotesSearchField({
+    super.key,
+    required this.controller,
+    required this.onChanged,
+  });
 
+  final TextEditingController controller;
   final ValueChanged<String> onChanged;
 
   @override
@@ -11,6 +16,7 @@ class NotesSearchField extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: TextField(
         key: const Key('note-search-field'),
+        controller: controller,
         onChanged: onChanged,
         decoration: const InputDecoration(
           labelText: 'Cari judul catatan',

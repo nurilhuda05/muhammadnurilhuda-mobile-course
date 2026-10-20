@@ -17,6 +17,13 @@ class NotesPage extends ConsumerStatefulWidget {
 
 class _NotesPageState extends ConsumerState<NotesPage> {
   String _query = '';
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +42,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           return Column(
             children: [
               NotesSearchField(
+                controller: _searchController,
                 onChanged: (value) => setState(() => _query = value),
               ),
               Expanded(

@@ -71,4 +71,44 @@ void main() {
     expect(find.text('Kuliah Flutter'), findsOneWidget);
     expect(find.text('Belanja'), findsNothing);
   });
+
+  testWidgets('query tetap sinkron dengan field setelah error lalu retry', (
+    tester,
+  ) async {
+    var shouldFail = false;
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          notesProvider.overrideWith((ref) async {
+            if (shouldFail) throw Exception('gagal');
+            return notes;
+          }),
+        ],
+        child: const MaterialApp(home: NotesPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const Key('note-search-field')),
+      'flutter',
+    );
+    await tester.pump();
+
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(NotesPage)),
+    );
+    shouldFail = true;
+    container.invalidate(notesProvider);
+    await tester.pumpAndSettle();
+
+    shouldFail = false;
+    container.invalidate(notesProvider);
+    await tester.pumpAndSettle();
+
+    final field = tester.widget<TextField>(
+      find.byKey(const Key('note-search-field')),
+    );
+    expect(field.controller?.text ?? '', 'flutter');
+    expect(find.text('Belanja'), findsNothing);
+  });
 }
