@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../providers/notes_providers.dart';
 import '../widgets/add_note_dialog.dart';
 import '../widgets/error_view.dart';
 import '../widgets/notes_list.dart';
-
+import '../widgets/notes_search_field.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
@@ -32,17 +33,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           final filtered = ref.read(searchNotesProvider)(notes, _query);
           return Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  key: const Key('note-search-field'),
-                  onChanged: (value) => setState(() => _query = value),
-                  decoration: const InputDecoration(
-                    labelText: 'Cari judul catatan',
-                    prefixIcon: Icon(Icons.search),
-                  ),
-                ),
-              ),
+              NotesSearchField(onChanged: (value) => setState(() => _query = value)),
               Expanded(
                 child: filtered.isEmpty
                     ? Center(
