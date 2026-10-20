@@ -199,3 +199,21 @@ Review statis: tidak ada temuan blocker, tetapi ada tiga saran yang layak ditang
 - `notes_page.dart`: terima + perbaiki (temuan 1, setelah dibuktikan).
 - `notes_search_test.dart`: terima + tambah test (temuan 3).
 - `search_notes.dart` dan `note_repository_impl.dart`: tidak diubah (temuan 2 ditolak).
+
+
+
+## Pembuktian dan Perbaikan Temuan AI
+
+#### 1. Temuan 3: Widget Test Query Cocok
+Saya menambahkan widget test `query cocok menampilkan catatan yang sesuai saja` pada `test/notes_search_test.dart`. Test ini memastikan catatan "Kuliah Flutter" tampil dan catatan "Belanja" tersembunyi saat query `flutter`. Hasilnya 13 test lulus.
+
+#### 2. Temuan 1: Test Merah sebagai Bukti
+![screenshot](../screenshot/aichallenge/1.png)<br>
+Untuk membuktikan temuan 1, saya menambahkan test `query tetap sinkron dengan field setelah error lalu retry`. Test tersebut gagal dengan pesan `Expected: 'flutter'` dan `Actual: ''` pada baris 111. Artinya setelah error lalu retry berhasil, kolom pencarian kosong kembali sementara `_query` masih berisi `flutter`, sehingga klaim AI terbukti benar.
+
+#### 3. Akar Masalah dan Perbaikan
+Akar masalahnya adalah `TextField` tidak memakai controller dan berada di dalam cabang `data:`, sehingga dibuat ulang kosong saat state berpindah ke loading atau error, sedangkan `_query` tetap berada di State halaman. Saya memperbaikinya dengan menyimpan `TextEditingController` di `_NotesPageState` dan memberikannya ke `NotesSearchField`.
+
+#### 4. Hasil Mesin Setelah Perbaikan
+![screenshot](../screenshot/aichallenge/2.png)<br>
+Setelah perbaikan, `flutter analyze` menunjukkan No issues found dan `flutter test` menunjukkan 14 test lulus. Panjang method `build` menjadi 39 baris (baris 29-67), masih di bawah batas 40 baris.
