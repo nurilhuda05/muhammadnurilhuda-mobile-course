@@ -231,3 +231,7 @@ Refactor utama yang saya lakukan adalah memindahkan aturan filter dari `notes_pa
 
 #### 4. Keputusan terima/tolak mana yang paling sulit?
 Keputusan yang paling sulit adalah menolak temuan review AI nomor 2 tentang pencarian di memori yang bisa lambat jika data besar. Temuan tersebut benar secara teknis, sehingga penolakannya perlu alasan yang kuat. Saya menolaknya karena jumlah catatan pada aplikasi ini kecil, dan memindahkan pencarian ke SQLite akan mengubah kontrak `NoteRepository` yang dilarang pada batas prompt. Jadi, keputusan ini adalah trade-off antara kesederhanaan dan skalabilitas, bukan penilaian bahwa saran AI itu salah.
+
+
+# HASIL AKHIR
+![screenshot](/screenshot/HasilAkhir.png)
