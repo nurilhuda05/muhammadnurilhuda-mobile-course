@@ -86,23 +86,23 @@ Validasi: flutter test lulus (10 test); flutter analyze tidak menemukan masalah.
 
 ## Verifikasi Hasil AI
 #### 1. Uji Manual: Query Kosong
-![screenshot](/screenshot/praktikum2/1.jpeg)<br>
+![screenshot](screenshot/praktikum2/1.jpeg)<br>
 Saat kolom pencarian kosong, semua catatan tampil.
 
 #### 2. Uji Manual: Query Cocok
-![screenshot](/screenshot/praktikum2/2.jpeg)<br>
+![screenshot](screenshot/praktikum2/2.jpeg)<br>
 Hanya catatan yang judulnya mengandung kata kunci yang tampil.
 
 #### 3. Uji Manual: Query Tak Cocok
-![screenshot](/screenshot/praktikum2/3.jpeg)<br>
+![screenshot](screenshot/praktikum2/3.jpeg)<br>
 Muncul empty state "Catatan tidak ditemukan.".
 
 #### 4. Hasil flutter analyze dan flutter test
-![screenshot](/screenshot/praktikum2/4.png)<br>
+![screenshot](screenshot/praktikum2/4.png)<br>
 `flutter analyze` menunjukkan No issues found, dan `flutter test` menunjukkan semua test lulus.
 
 #### 5. Bukti 1 dan 2: Celah Arsitektur dan Celah Test
-![screenshot](/screenshot/praktikum2/5.png)<br>
+![screenshot](screenshot/praktikum2/5.png)<br>
 Pencarian `filterNotesByTitle` menunjukkan fungsi berada di `notes_page.dart` (lapisan presentation), padahal seharusnya di use case domain. Pencarian `tidak ditemukan` di folder `test` hasilnya kosong, artinya teks "Catatan tidak ditemukan." belum punya widget test.
 
 
@@ -116,11 +116,11 @@ Saya melakukan reproduksi dengan membuka halaman Catatan, kemudian mengetikkan `
 Bagian yang saya isolasi adalah fungsi `filterNotesByTitle` pada `notes_page.dart` baris 10. Fungsi ini bersifat murni sehingga dapat saya uji langsung tanpa UI melalui unit test. Adapun pemilihan teks empty state di dalam `build` belum teruji dan memerlukan widget test.
 
 #### 3. Test Widget Empty State
-![screenshot](/screenshot/praktikum3/1.png)<br>
+![screenshot](screenshot/praktikum3/1.png)<br>
 Saya menambahkan widget test `query tak cocok menampilkan empty state` pada `test/notes_search_test.dart`. Hasil pengujian menunjukkan seluruh test pada file tersebut lulus (5 test). Test tidak berstatus merah karena saya tidak menemukan bug logika pada kode.
 
 #### 4. Hasil Mesin: flutter test dan flutter analyze
-![screenshot](/screenshot/praktikum3/2.png)<br>
+![screenshot](screenshot/praktikum3/2.png)<br>
 Saya menjalankan `flutter test` untuk seluruh proyek dan hasilnya 12 test lulus. Saya juga menjalankan `flutter analyze` dan tidak ditemukan masalah (No issues found).
 
 #### 5. Akar Masalah
@@ -130,7 +130,7 @@ Akar masalah yang saya temukan adalah celah pengujian, yaitu cabang "Catatan tid
 
 ## Refactor ke Layer yang Benar
 #### 1. Kondisi Sebelum Refactor
-![screenshot](/screenshot/praktikum3/3.png)<br>
+![screenshot](screenshot/praktikum3/3.png)<br>
 Sebelum refactor, fungsi `filterNotesByTitle` berada di `notes_page.dart` (lapisan presentation), sedangkan aturan filter seharusnya berada di use case domain. Saya juga mengukur bahwa file `notes_page.dart` berisi 80 baris dan method `build` berukuran 52 baris (baris 20-71), melebihi batas 40 baris dari modul. Pengecekan database dari widget menunjukkan tidak ada panggilan SQLite pada `pages/` maupun `widgets/`. Import `database_helper.dart` pada `notes_providers.dart` hanya berfungsi sebagai wiring repository.
 
 #### 2. Use Case SearchNotes di Domain
@@ -140,14 +140,14 @@ Saya memindahkan aturan filter ke use case `SearchNotes` pada `domain/usecases/s
 Saya memecah `build` dengan membuat widget `NotesSearchField` dan `NotesEmptyState`. Panjang `build` turun dari 52 baris menjadi 41 baris setelah `NotesSearchField`, lalu menjadi 36 baris setelah `NotesEmptyState`. Setelah `dart format`, panjangnya menjadi 37 baris (baris 22-58), sudah di bawah batas 40 baris.
 
 #### 4. Pengecekan Batas Layer
-![screenshot](/screenshot/praktikum3/4.png)<br>
+![screenshot](screenshot/praktikum3/4.png)<br>
 Pencarian `flutter|dio|sqflite` pada folder `domain/` menghasilkan keluaran kosong, sehingga domain bebas dari Flutter, Dio, dan SQLite. Pencarian `sqflite|database_helper|dio` pada `pages/` dan `widgets/` juga kosong, sehingga tidak ada panggilan database dari widget.
 
 
 
 ## Verifikasi Akhir
 #### 5. Hasil analyze, format, dan test
-![screenshot](/screenshot/praktikum3/5.png)<br>
+![screenshot](screenshot/praktikum3/5.png)<br>
 Saya menjalankan `flutter analyze` dan hasilnya No issues found. Saya menjalankan `dart format --set-exit-if-changed lib test` hingga tidak ada file yang berubah. Saya juga menjalankan `flutter test` dan hasilnya 12 test lulus. Pada proyek ini `dart format` saya batasi ke folder `lib` dan `test`, karena perintah `dart format .` gagal membaca path di folder `build/` (hasil kompilasi Android) dan bukan karena kode saya.
 
 
@@ -208,14 +208,14 @@ Review statis: tidak ada temuan blocker, tetapi ada tiga saran yang layak ditang
 Saya menambahkan widget test `query cocok menampilkan catatan yang sesuai saja` pada `test/notes_search_test.dart`. Test ini memastikan catatan "Kuliah Flutter" tampil dan catatan "Belanja" tersembunyi saat query `flutter`. Hasilnya 13 test lulus.
 
 #### 2. Temuan 1: Test Merah sebagai Bukti
-![screenshot](/screenshot/aichallenge/1.png)<br>
+![screenshot](screenshot/aichallenge/1.png)<br>
 Untuk membuktikan temuan 1, saya menambahkan test `query tetap sinkron dengan field setelah error lalu retry`. Test tersebut gagal dengan pesan `Expected: 'flutter'` dan `Actual: ''` pada baris 111. Artinya setelah error lalu retry berhasil, kolom pencarian kosong kembali sementara `_query` masih berisi `flutter`, sehingga klaim AI terbukti benar.
 
 #### 3. Akar Masalah dan Perbaikan
 Akar masalahnya adalah `TextField` tidak memakai controller dan berada di dalam cabang `data:`, sehingga dibuat ulang kosong saat state berpindah ke loading atau error, sedangkan `_query` tetap berada di State halaman. Saya memperbaikinya dengan menyimpan `TextEditingController` di `_NotesPageState` dan memberikannya ke `NotesSearchField`.
 
 #### 4. Hasil Mesin Setelah Perbaikan
-![screenshot](/screenshot/aichallenge/2.png)<br>
+![screenshot](screenshot/aichallenge/2.png)<br>
 Setelah perbaikan, `flutter analyze` menunjukkan No issues found dan `flutter test` menunjukkan 14 test lulus. Panjang method `build` menjadi 39 baris (baris 29-67), masih di bawah batas 40 baris.
 
 
