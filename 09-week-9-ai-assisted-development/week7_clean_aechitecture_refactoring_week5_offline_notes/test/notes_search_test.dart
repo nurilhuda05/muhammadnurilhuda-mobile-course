@@ -33,4 +33,20 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Belum ada catatan.'), findsOneWidget);
   });
+
+  testWidgets('query tak cocok menampilkan empty state', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [notesProvider.overrideWith((ref) async => notes)],
+        child: const MaterialApp(home: NotesPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const Key('note-search-field')),
+      'zzz-tak-ada',
+    );
+    await tester.pump();
+    expect(find.text('Catatan tidak ditemukan.'), findsOneWidget);
+  });
 }
