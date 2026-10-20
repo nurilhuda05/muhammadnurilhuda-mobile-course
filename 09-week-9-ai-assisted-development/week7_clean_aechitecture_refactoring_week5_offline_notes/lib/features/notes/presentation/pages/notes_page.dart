@@ -5,12 +5,28 @@ import '../providers/notes_providers.dart';
 import '../widgets/add_note_dialog.dart';
 import '../widgets/error_view.dart';
 import '../widgets/notes_list.dart';
+import '../widgets/notes_search_field.dart';
+import '../widgets/notes_empty_state.dart';
 
-class NotesPage extends ConsumerWidget {
+class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NotesPage> createState() => _NotesPageState();
+}
+
+class _NotesPageState extends ConsumerState<NotesPage> {
+  String _query = '';
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(notesProvider);
 
     return Scaffold(
@@ -21,9 +37,22 @@ class NotesPage extends ConsumerWidget {
           message: '$e',
           onRetry: () => ref.invalidate(notesProvider),
         ),
-        data: (notes) => notes.isEmpty
-            ? const Center(child: Text('Belum ada catatan.'))
-            : NotesList(notes),
+        data: (notes) {
+          final filtered = ref.read(searchNotesProvider)(notes, _query);
+          return Column(
+            children: [
+              NotesSearchField(
+                controller: _searchController,
+                onChanged: (value) => setState(() => _query = value),
+              ),
+              Expanded(
+                child: filtered.isEmpty
+                    ? NotesEmptyState(isSearching: _query.trim().isNotEmpty)
+                    : NotesList(filtered),
+              ),
+            ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
