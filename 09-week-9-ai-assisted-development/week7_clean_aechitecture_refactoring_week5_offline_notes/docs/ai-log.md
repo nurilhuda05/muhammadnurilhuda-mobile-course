@@ -81,3 +81,24 @@ Implementasi dan empty state ada di notes_page.dart.
 Tiga test—pencarian tanpa membedakan kapitalisasi, query kosong, dan widget test empty state—ada di notes_search_test.dart.
 Validasi: flutter test lulus (10 test); flutter analyze tidak menemukan masalah.
 
+
+# VERIFIKASI HASIL AI
+#### 1. Uji Manual: Query Kosong
+![screenshot](../screenshot/praktikum2/1.jpeg)<br>
+Saat kolom pencarian kosong, semua catatan tampil.
+
+#### 2. Uji Manual: Query Cocok
+![screenshot](../screenshot/praktikum2/2.jpeg)<br>
+Hanya catatan yang judulnya mengandung kata kunci yang tampil.
+
+#### 3. Uji Manual: Query Tak Cocok
+![screenshot](../screenshot/praktikum2/3.jpeg)<br>
+Muncul empty state "Catatan tidak ditemukan.".
+
+#### 4. Hasil flutter analyze dan flutter test
+![screenshot](../screenshot/praktikum2/4.png)<br>
+`flutter analyze` menunjukkan No issues found, dan `flutter test` menunjukkan semua test lulus.
+
+#### 5. Bukti 1 dan 2: Celah Arsitektur dan Celah Test
+![screenshot](../screenshot/praktikum2/5.png)<br>
+Pencarian `filterNotesByTitle` menunjukkan fungsi berada di `notes_page.dart` (lapisan presentation), padahal seharusnya di use case domain. Pencarian `tidak ditemukan` di folder `test` hasilnya kosong, artinya teks "Catatan tidak ditemukan." belum punya widget test.
