@@ -52,4 +52,23 @@ void main() {
     await tester.pump();
     expect(find.text('Catatan tidak ditemukan.'), findsOneWidget);
   });
+
+  testWidgets('query cocok menampilkan catatan yang sesuai saja', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [notesProvider.overrideWith((ref) async => notes)],
+        child: const MaterialApp(home: NotesPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const Key('note-search-field')),
+      'flutter',
+    );
+    await tester.pump();
+    expect(find.text('Kuliah Flutter'), findsOneWidget);
+    expect(find.text('Belanja'), findsNothing);
+  });
 }
