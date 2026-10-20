@@ -34,7 +34,9 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           final filtered = ref.read(searchNotesProvider)(notes, _query);
           return Column(
             children: [
-              NotesSearchField(onChanged: (value) => setState(() => _query = value)),
+              NotesSearchField(
+                onChanged: (value) => setState(() => _query = value),
+              ),
               Expanded(
                 child: filtered.isEmpty
                     ? NotesEmptyState(isSearching: _query.trim().isNotEmpty)
