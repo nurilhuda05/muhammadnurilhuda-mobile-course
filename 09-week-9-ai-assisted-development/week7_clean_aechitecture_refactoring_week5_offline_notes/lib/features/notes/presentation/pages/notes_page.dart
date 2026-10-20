@@ -6,6 +6,7 @@ import '../widgets/add_note_dialog.dart';
 import '../widgets/error_view.dart';
 import '../widgets/notes_list.dart';
 import '../widgets/notes_search_field.dart';
+import '../widgets/notes_empty_state.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
@@ -36,13 +37,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               NotesSearchField(onChanged: (value) => setState(() => _query = value)),
               Expanded(
                 child: filtered.isEmpty
-                    ? Center(
-                        child: Text(
-                          _query.trim().isEmpty
-                              ? 'Belum ada catatan.'
-                              : 'Catatan tidak ditemukan.',
-                        ),
-                      )
+                    ? NotesEmptyState(isSearching: _query.trim().isNotEmpty)
                     : NotesList(filtered),
               ),
             ],
