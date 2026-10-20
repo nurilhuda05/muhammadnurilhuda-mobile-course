@@ -180,3 +180,22 @@ Review statis: tidak ada temuan blocker, tetapi ada tiga saran yang layak ditang
 - Level: Saran
 - Lokasi: `notes_search_test.dart`
 - Temuan dan alasan: Belum ada widget test untuk hasil pencarian yang cocok. Test unit memeriksa pencocokan use case, tetapi widget test hanya mencakup daftar kosong dan query tanpa hasil. Tambahkan test yang memastikan query cocok menampilkan catatan yang benar dan menyembunyikan catatan lain agar wiring UI ikut teruji.
+
+
+## Keputusan Terima atau Tolak
+#### Temuan 1: _query tidak sinkron dengan field setelah error/retry
+- Keputusan: Terima, perbaiki setelah dibuktikan dengan test.
+- Alasan teknis: `TextField` tidak memakai controller dan berada di dalam cabang `data:`, sehingga ikut dibuat ulang saat state berpindah ke loading atau error. Sementara itu `_query` berada di State halaman yang tetap hidup. Klaim ini baru saya anggap benar setelah saya buktikan dengan test.
+
+#### Temuan 2: pencarian memindai seluruh catatan di memori
+- Keputusan: Tolak.
+- Alasan teknis: Jumlah catatan pada aplikasi ini kecil, sehingga pencarian di memori sudah memadai. Memindahkan pencarian ke SQLite akan mengubah kontrak `NoteRepository`, padahal pada batas prompt saya kontrak tersebut tidak boleh diubah.
+
+#### Temuan 3: belum ada widget test untuk query cocok
+- Keputusan: Terima.
+- Alasan teknis: Test unit hanya menguji use case, sedangkan wiring UI untuk hasil yang cocok belum teruji. Saya menambahkan widget test yang memastikan catatan yang cocok tampil dan catatan lain tersembunyi.
+
+#### Keputusan per file
+- `notes_page.dart`: terima + perbaiki (temuan 1, setelah dibuktikan).
+- `notes_search_test.dart`: terima + tambah test (temuan 3).
+- `search_notes.dart` dan `note_repository_impl.dart`: tidak diubah (temuan 2 ditolak).
