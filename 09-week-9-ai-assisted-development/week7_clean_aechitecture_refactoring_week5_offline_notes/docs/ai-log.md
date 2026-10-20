@@ -217,3 +217,17 @@ Akar masalahnya adalah `TextField` tidak memakai controller dan berada di dalam 
 #### 4. Hasil Mesin Setelah Perbaikan
 ![screenshot](../screenshot/aichallenge/2.png)<br>
 Setelah perbaikan, `flutter analyze` menunjukkan No issues found dan `flutter test` menunjukkan 14 test lulus. Panjang method `build` menjadi 39 baris (baris 29-67), masih di bawah batas 40 baris.
+
+
+# REFLEKSI
+#### 1. Satu halusinasi AI apa yang Anda temukan dan bagaimana membuktikannya?
+Pada praktikum ini saya tidak menemukan halusinasi API seperti method fiktif atau package kadaluarsa. Temuan yang paling mendekati adalah logika yang terlihat yakin tetapi salah, yaitu kolom pencarian dan `_query` tidak sinkron setelah terjadi error lalu retry. Saya membuktikannya dengan menulis widget test yang gagal dengan pesan `Expected: 'flutter'` dan `Actual: ''`. Setelah itu saya memperbaikinya dengan menyimpan `TextEditingController` di State halaman, sehingga test berubah hijau.
+
+#### 2. Prompt mana yang paling membantu dan apa yang Anda ubah?
+Prompt yang paling membantu adalah prompt 5 slot (peran, konteks, tugas, batas, output) karena memberi AI arah yang jelas, terutama batas arsitektur dan larangan mengubah kontrak `NoteRepository`. Hasilnya sesuai dengan fitur yang diminta. Namun, hasil tersebut belum sepenuhnya ideal, sehingga saya mengubahnya sendiri: filter saya pindahkan ke use case `SearchNotes`, `build` saya pecah menjadi widget kecil, dan test saya tambah untuk cabang yang belum teruji.
+
+#### 3. Satu refactor apa yang Anda lakukan pada kode AI?
+Refactor utama yang saya lakukan adalah memindahkan aturan filter dari `notes_page.dart` (lapisan presentation) ke use case `SearchNotes` di lapisan domain yang murni Dart. Use case tersebut saya sambungkan melalui `searchNotesProvider`, lalu fungsi lama saya hapus dari widget. Selain itu, method `build` yang awalnya 52 baris saya pecah menjadi widget `NotesSearchField` dan `NotesEmptyState` sehingga memenuhi batas 40 baris. Seluruh test tetap lulus setelah refactor, yang menunjukkan perilaku aplikasi tidak berubah.
+
+#### 4. Keputusan terima/tolak mana yang paling sulit?
+Keputusan yang paling sulit adalah menolak temuan review AI nomor 2 tentang pencarian di memori yang bisa lambat jika data besar. Temuan tersebut benar secara teknis, sehingga penolakannya perlu alasan yang kuat. Saya menolaknya karena jumlah catatan pada aplikasi ini kecil, dan memindahkan pencarian ke SQLite akan mengubah kontrak `NoteRepository` yang dilarang pada batas prompt. Jadi, keputusan ini adalah trade-off antara kesederhanaan dan skalabilitas, bukan penilaian bahwa saran AI itu salah.
