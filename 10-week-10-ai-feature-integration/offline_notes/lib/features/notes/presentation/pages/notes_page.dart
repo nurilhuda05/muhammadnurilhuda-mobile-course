@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../providers/notes_providers.dart';
 import '../widgets/add_note_dialog.dart';
@@ -30,7 +31,16 @@ class _NotesPageState extends ConsumerState<NotesPage> {
     final state = ref.watch(notesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Catatan')),
+      appBar: AppBar(
+        title: const Text('Catatan'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.smart_toy_outlined),
+            tooltip: 'Asisten AI',
+            onPressed: () => context.push('/ai-chat'),
+          ),
+        ],
+      ),
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => ErrorView(
