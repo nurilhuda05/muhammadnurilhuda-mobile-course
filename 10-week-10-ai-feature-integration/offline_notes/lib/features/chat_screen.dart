@@ -53,29 +53,35 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         _streamingText = '';
       });
     } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
       if (!mounted) return;
-      showDialog(
+      final shouldOpenSettings = await showDialog<bool>(
         context: context,
-        builder: (_) => AlertDialog(
+        builder: (dialogContext) => AlertDialog(
           title: const Text('Layanan AI Sibuk'),
           content: Text(
             'Coba lagi nanti atau gunakan mode offline.\n\nDetail: $e',
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.of(dialogContext).pop(false),
               child: const Text('Tutup'),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                _showApiKeyDialog();
-              },
+              onPressed: () => Navigator.of(dialogContext).pop(true),
               child: const Text('Atur API Key'),
             ),
           ],
         ),
       );
+
+      if (shouldOpenSettings == true && mounted) {
+        _showApiKeyDialog();
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -101,46 +107,34 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Future<void> _showApiKeyDialog() async {
     final aiService = ref.read(aiServiceProvider);
     final currentKey = await aiService.getApiKey() ?? '';
-    final keyController = TextEditingController(text: currentKey);
 
     if (!mounted) return;
-    await showDialog(
+    final newKey = await showDialog<String>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Atur Gemini API Key'),
-        content: TextField(
-          controller: keyController,
-          obscureText: true,
-          decoration: const InputDecoration(
-            labelText: 'API Key',
-            hintText: 'Masukkan API Key Gemini Anda',
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Batal'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              await aiService.saveApiKey(keyController.text.trim());
-              if (dialogContext.mounted) {
-                Navigator.pop(dialogContext);
-              }
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('API Key berhasil disimpan dengan aman.'),
-                  ),
-                );
-              }
-            },
-            child: const Text('Simpan'),
-          ),
-        ],
-      ),
+      builder: (_) => ApiKeyDialog(initialKey: currentKey),
     );
-    keyController.dispose();
+
+    if (newKey != null && mounted) {
+      try {
+        await aiService.saveApiKey(newKey);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('API Key berhasil disimpan dengan aman.'),
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Gagal menyimpan API Key: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
   }
 
   @override
@@ -230,6 +224,66 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ApiKeyDialog extends StatefulWidget {
+  final String initialKey;
+
+  const ApiKeyDialog({
+    super.key,
+    required this.initialKey,
+  });
+
+  @override
+  State<ApiKeyDialog> createState() => _ApiKeyDialogState();
+}
+
+class _ApiKeyDialogState extends State<ApiKeyDialog> {
+  late final TextEditingController _keyController;
+
+  @override
+  void initState() {
+    super.initState();
+    _keyController = TextEditingController(text: widget.initialKey);
+  }
+
+  @override
+  void dispose() {
+    _keyController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Atur Gemini API Key'),
+      content: TextField(
+        controller: _keyController,
+        obscureText: true,
+        decoration: const InputDecoration(
+          labelText: 'API Key',
+          hintText: 'Masukkan API Key Gemini Anda',
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            Navigator.of(context).pop();
+          },
+          child: const Text('Batal'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            final key = _keyController.text.trim();
+            Navigator.of(context).pop(key);
+          },
+          child: const Text('Simpan'),
+        ),
+      ],
     );
   }
 }
