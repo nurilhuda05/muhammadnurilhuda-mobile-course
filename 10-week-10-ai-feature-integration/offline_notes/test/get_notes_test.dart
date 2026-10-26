@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/core/failures.dart';
-import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/domain/entities/note.dart';
-import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/domain/repositories/note_repository.dart';
-import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/domain/usecases/get_notes.dart';
+import 'package:offline_notes/core/failures.dart';
+import 'package:offline_notes/features/notes/domain/entities/note.dart';
+import 'package:offline_notes/features/notes/domain/repositories/note_repository.dart';
+import 'package:offline_notes/features/notes/domain/usecases/get_notes.dart';
 
 class FakeNoteRepository implements NoteRepository {
   FakeNoteRepository({this.items = const [], this.fail = false});

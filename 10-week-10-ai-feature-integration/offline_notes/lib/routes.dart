@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import 'features/notes/presentation/pages/notes_page.dart';
 import 'features/announcements/presentation/pages/announcements_page.dart';
+import 'features/chat_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   routes: [
@@ -9,6 +10,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/announcements',
       builder: (context, state) => const AnnouncementsPage(),
+    ),
+    GoRoute(
+      path: '/ai-chat',
+      builder: (context, state) => const ChatScreen(),
     ),
   ],
 );

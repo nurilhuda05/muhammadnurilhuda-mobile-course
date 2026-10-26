@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/core/failures.dart';
-import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/data/repositories/note_repository_impl.dart';
+import 'package:offline_notes/core/failures.dart';
+import 'package:offline_notes/features/notes/data/repositories/note_repository_impl.dart';
 
 void main() {
   sqfliteFfiInit();

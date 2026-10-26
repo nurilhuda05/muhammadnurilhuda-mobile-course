@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/domain/entities/note.dart';
-import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/presentation/pages/notes_page.dart';
-import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/presentation/providers/notes_providers.dart';
-import 'package:week7_clean_aechitecture_refactoring_week5_offline_notes/features/notes/domain/usecases/search_notes.dart';
+import 'package:offline_notes/features/notes/domain/entities/note.dart';
+import 'package:offline_notes/features/notes/presentation/pages/notes_page.dart';
+import 'package:offline_notes/features/notes/presentation/providers/notes_providers.dart';
+import 'package:offline_notes/features/notes/domain/usecases/search_notes.dart';
 
 void main() {
   final notes = [
