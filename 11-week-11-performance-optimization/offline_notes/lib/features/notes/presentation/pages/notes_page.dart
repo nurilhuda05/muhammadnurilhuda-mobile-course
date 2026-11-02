@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import '../providers/notes_providers.dart';
 import '../widgets/add_note_dialog.dart';
 import '../widgets/error_view.dart';
+import '../widgets/notes_empty_state.dart';
 import '../widgets/notes_list.dart';
 import '../widgets/notes_search_field.dart';
-import '../widgets/notes_empty_state.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
@@ -17,19 +17,18 @@ class NotesPage extends ConsumerStatefulWidget {
 }
 
 class _NotesPageState extends ConsumerState<NotesPage> {
-  String _query = '';
+  final _queryNotifier = ValueNotifier<String>('');
   final _searchController = TextEditingController();
 
   @override
   void dispose() {
     _searchController.dispose();
+    _queryNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(notesProvider);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Catatan'),
@@ -41,28 +40,39 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           ),
         ],
       ),
-      body: state.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => ErrorView(
-          message: '$e',
-          onRetry: () => ref.invalidate(notesProvider),
-        ),
-        data: (notes) {
-          final filtered = ref.read(searchNotesProvider)(notes, _query);
-          return Column(
-            children: [
-              NotesSearchField(
-                controller: _searchController,
-                onChanged: (value) => setState(() => _query = value),
-              ),
-              Expanded(
-                child: filtered.isEmpty
-                    ? NotesEmptyState(isSearching: _query.trim().isNotEmpty)
-                    : NotesList(filtered),
-              ),
-            ],
-          );
-        },
+      body: Column(
+        children: [
+          NotesSearchField(
+            controller: _searchController,
+            onChanged: (value) => _queryNotifier.value = value,
+          ),
+          Expanded(
+            child: Consumer(
+              builder: (context, ref, _) {
+                final state = ref.watch(notesProvider);
+                return state.when(
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (e, _) => ErrorView(
+                    message: '$e',
+                    onRetry: () => ref.invalidate(notesProvider),
+                  ),
+                  data: (notes) {
+                    return ValueListenableBuilder<String>(
+                      valueListenable: _queryNotifier,
+                      builder: (context, query, _) {
+                        final filtered = ref.read(searchNotesProvider)(notes, query);
+                        if (filtered.isEmpty) {
+                          return NotesEmptyState(isSearching: query.trim().isNotEmpty);
+                        }
+                        return NotesList(filtered);
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -75,4 +85,4 @@ class _NotesPageState extends ConsumerState<NotesPage> {
       ),
     );
   }
-}
+}
