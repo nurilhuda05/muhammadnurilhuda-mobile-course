@@ -167,28 +167,32 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               itemCount: _messages.length + (_streamingText.isNotEmpty ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index == _messages.length && _streamingText.isNotEmpty) {
-                  return Align(
-                    alignment: Alignment.centerLeft,
-                    child: Card(
-                      color: Colors.grey.shade200,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Text(_streamingText),
+                  return RepaintBoundary(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Card(
+                        color: Colors.grey.shade200,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(_streamingText),
+                        ),
                       ),
                     ),
                   );
                 }
                 final msg = _messages[index];
-                return Align(
-                  alignment:
-                      msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Card(
-                    color: msg.isUser
-                        ? Theme.of(context).colorScheme.primaryContainer
-                        : Colors.grey.shade200,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Text(msg.text),
+                return RepaintBoundary(
+                  child: Align(
+                    alignment:
+                        msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
+                    child: Card(
+                      color: msg.isUser
+                          ? Theme.of(context).colorScheme.primaryContainer
+                          : Colors.grey.shade200,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Text(msg.text),
+                      ),
                     ),
                   ),
                 );

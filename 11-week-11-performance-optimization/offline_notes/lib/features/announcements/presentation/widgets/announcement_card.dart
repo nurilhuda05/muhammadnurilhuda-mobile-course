@@ -10,15 +10,17 @@ class AnnouncementCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: ListTile(
-        leading: const Icon(Icons.campaign),
-        title: Text(announcement.title),
-        subtitle: Text(announcement.content),
-        trailing: Text(
-          formatDateOnly(announcement.createdAt),
-          style: Theme.of(context).textTheme.bodySmall,
+    return RepaintBoundary(
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: ListTile(
+          leading: const Icon(Icons.campaign),
+          title: Text(announcement.title),
+          subtitle: Text(announcement.content),
+          trailing: Text(
+            formatDateOnly(announcement.createdAt),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/format.dart';
 import '../../domain/entities/note.dart';
+import 'note_item_tile.dart';
 
 class NotesList extends StatelessWidget {
   const NotesList(this.notes, {super.key});
@@ -14,16 +14,12 @@ class NotesList extends StatelessWidget {
       itemCount: notes.length,
       itemBuilder: (context, index) {
         final note = notes[index];
-
-        return ListTile(
-          title: Text(note.title),
-          subtitle: Text(note.body),
-          trailing: Text(
-            formatDateTime(note.updatedAt),
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+        return NoteItemTile(
+          key: ValueKey(note.id ?? index),
+          note: note,
         );
       },
     );
   }
 }
+
