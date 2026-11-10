@@ -1,5 +1,8 @@
 # Laporan Praktikum Minggu 12: Pengujian dan Jaminan Kualitas (Testing & Quality Assurance)
 
+- **Nama:** Muhammad Nuril Huda
+- **NIM:** 244107020004
+- **Kelas:** TI-3G
 - **Mata Kuliah:** Pemrograman Mobile
 - **Topik:** Testing & Quality Assurance (Unit Test, Widget Test, Integration Test, Code Coverage)
 - **Aplikasi:** Offline Notes (`offline_notes`)
