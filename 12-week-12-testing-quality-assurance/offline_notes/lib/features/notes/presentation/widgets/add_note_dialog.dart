@@ -29,10 +29,12 @@ class _AddNoteDialogState extends ConsumerState<AddNoteDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
+            key: const Key('note-title-field'),
             controller: titleController,
             decoration: const InputDecoration(labelText: 'Judul'),
           ),
           TextField(
+            key: const Key('note-body-field'),
             controller: bodyController,
             decoration: const InputDecoration(labelText: 'Isi'),
           ),
@@ -44,6 +46,7 @@ class _AddNoteDialogState extends ConsumerState<AddNoteDialog> {
           child: const Text('Batal'),
         ),
         ElevatedButton(
+          key: const Key('save-note-button'),
           onPressed: () async {
             final result = await ref
                 .read(addNoteProvider)

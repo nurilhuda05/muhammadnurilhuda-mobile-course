@@ -75,6 +75,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        key: const Key('add-note-fab'),
         onPressed: () {
           showDialog(
             context: context,
