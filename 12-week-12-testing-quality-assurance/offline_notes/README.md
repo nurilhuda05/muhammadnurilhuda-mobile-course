@@ -143,3 +143,4 @@ flutter test integration_test/app_test.dart -d <device_id>
   - *Fokus:* Menguji aplikasi secara menyeluruh (*end-to-end*) pada perangkat fisik atau emulator nyata.
   - *Kecepatan & Biaya:* Lebih lambat dan membutuhkan build native penuh serta emulator yang aktif.
   - *Manfaat:* Memastikan seluruh komponen yang berbeda (UI, State Management Riverpod, Router, Service, dan Plugin Database) benar-benar terintegrasi dan bekerja harmonis di lingkungan sistem operasi nyata.
+
