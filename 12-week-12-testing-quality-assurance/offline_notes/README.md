@@ -42,6 +42,8 @@ No issues found! (ran in 9.0s)
 ```
 **Hasil:** Bersih tanpa warning maupun issue (`No issues found!`).
 
+![Bukti Flutter Analyze](screenshots/01_flutter_analyze.png)
+
 ### B. Unit & Widget Testing (`flutter test`)
 Pengujian menyeluruh unit test dan widget test yang dijalankan melalui perintah `flutter test`:
 
@@ -63,6 +65,8 @@ $ flutter test
 ```
 **Hasil:** 33 dari 33 pengujian dinyatakan lulus (100% Passed).
 
+![Bukti Flutter Test All Passed](screenshots/02_flutter_test_all.png)
+
 ---
 
 ## 3. Code Coverage (`flutter test --coverage`)
@@ -80,6 +84,8 @@ flutter test --coverage
 
 Coverage terbesar berada pada domain logic, repository, validator, dan widget interaksi utama seperti `validators.dart`, `note_repository_impl.dart`, `get_notes.dart`, `search_notes.dart`, serta widget `error_view.dart` dan `notes_empty_state.dart`.
 
+![Bukti Code Coverage](screenshots/03_flutter_test_coverage.png)
+
 ---
 
 ## 4. Pengujian Integrasi (Integration Test)
@@ -96,6 +102,8 @@ Pengujian integrasi dibuat pada file `integration_test/app_test.dart` untuk meng
 ```bash
 flutter test integration_test/app_test.dart -d <device_id>
 ```
+
+![Bukti Eksekusi Integration Test](screenshots/04_integration_test.png)
 
 ### Kendala Perangkat & Solusi:
 - **Target Windows Desktop (`-d windows`):**
