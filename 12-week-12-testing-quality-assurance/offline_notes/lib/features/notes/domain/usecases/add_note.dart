@@ -1,6 +1,7 @@
 import '../../../../core/failures.dart';
 import '../entities/note.dart';
 import '../repositories/note_repository.dart';
+import '../validators.dart';
 
 class AddNote {
   const AddNote(this._repository);
@@ -11,7 +12,7 @@ class AddNote {
     required String title,
     String body = '',
   }) async {
-    if (title.trim().isEmpty) {
+    if (!isValidNoteTitle(title)) {
       return (
         note: null,
         failure: const LocalFailure('Judul tidak boleh kosong'),
