@@ -33,37 +33,12 @@ Berdasarkan Langkah Praktik 1 dan Bagian 11 Jobsheet 12, dirancang skenario peng
 ## 2. Hasil Eksekusi Pengujian Otomatis
 
 ### A. Static Analysis (`flutter analyze`)
-Pemeriksaan kode statis untuk memastikan tidak ada syntax error, unused import, atau pelanggaran lint rule:
-
-```text
-$ flutter analyze
-Analyzing offline_notes...                                      
-No issues found! (ran in 9.0s)
-```
-**Hasil:** Bersih tanpa warning maupun issue (`No issues found!`).
+Pemeriksaan kode statis untuk memastikan tidak ada syntax error, unused import, atau pelanggaran lint rule. Hasil analisis menunjukkan kode bersih tanpa warning maupun error:
 
 ![Bukti Flutter Analyze](screenshots/01_flutter_analyze.png)
 
 ### B. Unit & Widget Testing (`flutter test`)
-Pengujian menyeluruh unit test dan widget test yang dijalankan melalui perintah `flutter test`:
-
-```text
-$ flutter test
-00:00 +0: D:/.../test/add_note_test.dart: AddNote mengembalikan LocalFailure jika judul kosong
-00:00 +1: D:/.../test/add_note_test.dart: AddNote meneruskan ke repository jika judul valid
-00:00 +2: D:/.../test/features/chat_screen_test.dart: AiService memiliki systemPrompt dengan batas bahasa dan privasi
-00:00 +3: D:/.../test/features/chat_screen_test.dart: ChatScreen menampilkan peringatan privasi dan komponen input
-...
-00:03 +21: D:/.../test/features/notes/notes_widget_test.dart: Widget Test Fitur Utama Catatan (Jobsheet 12) 1. Menampilkan indikator loading saat data catatan sedang dimuat
-00:03 +22: D:/.../test/features/notes/notes_widget_test.dart: Widget Test Fitur Utama Catatan (Jobsheet 12) 2. Menampilkan tampilan kosong (empty state) jika tidak ada catatan
-00:04 +26: D:/.../test/features/notes/notes_widget_test.dart: Widget Test Fitur Utama Catatan (Jobsheet 12) 3. Menampilkan pesan error dan tombol Coba Lagi saat terjadi kesalahan
-00:04 +27: D:/.../test/features/notes/notes_widget_test.dart: Widget Test Fitur Utama Catatan (Jobsheet 12) 4. Membuka dialog tambah catatan dan menampilkan error jika judul kosong
-00:05 +28: D:/.../test/features/notes/notes_widget_test.dart: Widget Test Fitur Utama Catatan (Jobsheet 12) 5. Berhasil menyimpan catatan baru dan menambahkannya ke tampilan list
-00:05 +29: D:/.../test/features/notes/notes_widget_test.dart: Widget Test Fitur Utama Catatan (Jobsheet 12) 6. Menekan tombol Batal menutup dialog tanpa menyimpan catatan
-...
-00:07 +33: All tests passed!
-```
-**Hasil:** 33 dari 33 pengujian dinyatakan lulus (100% Passed).
+Pengujian menyeluruh pada unit test dan widget test yang mencakup kondisi berhasil, kasus tepi (*edge cases*), dan penanganan kegagalan (*failure condition*). Seluruh 33 pengujian dinyatakan lulus (100% Passed):
 
 ![Bukti Flutter Test All Passed](screenshots/02_flutter_test_all.png)
 
@@ -72,12 +47,6 @@ $ flutter test
 ## 3. Code Coverage (`flutter test --coverage`)
 
 Pengukuran cakupan baris kode yang dieksekusi selama pengujian otomatis:
-
-```bash
-flutter test --coverage
-```
-
-### Ringkasan Coverage:
 - **Total Baris Kode Teridentifikasi (Lines Found):** 369 baris
 - **Total Baris Kode Tereksekusi (Lines Hit):** 269 baris
 - **Persentase Cakupan Kode (Code Coverage):** **72.9%**
@@ -97,11 +66,6 @@ Pengujian integrasi dibuat pada file `integration_test/app_test.dart` untuk meng
 4. Menekan tombol simpan (`save-note-button`).
 5. Memverifikasi catatan tampil pada daftar utama.
 6. Menguji field pencarian catatan (`note-search-field`) untuk memfilter catatan yang baru dibuat.
-
-### Perintah Eksekusi Integration Test:
-```bash
-flutter test integration_test/app_test.dart -d <device_id>
-```
 
 ![Bukti Eksekusi Integration Test](screenshots/04_integration_test.png)
 
