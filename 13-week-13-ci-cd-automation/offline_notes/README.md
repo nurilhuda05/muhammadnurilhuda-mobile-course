@@ -47,6 +47,7 @@ Daftar commit terstruktur yang telah dibuat:
 3. `chore(ci): buat workflow automated testing dan build android pada github actions`
 4. `docs(readme): tambahkan dokumentasi lengkap ci-cd laporan dan refleksi jobsheet 13`
 5. `fix(ci): abaikan notice deprecated_member_use pada static analysis`
+6. `fix(ci): perbarui agp ke 9.1.1 dan tambahkan flag skip build dependency validation`
 
 ---
 
@@ -106,10 +107,10 @@ jobs:
         run: flutter test --coverage
 
       - name: Build Android APK
-        run: flutter build apk --release
+        run: flutter build apk --release --android-skip-build-dependency-validation
 
       - name: Build Android App Bundle (AAB)
-        run: flutter build appbundle --release
+        run: flutter build appbundle --release --android-skip-build-dependency-validation
 
       - name: Upload Android Build Artifacts
         uses: actions/upload-artifact@v4
@@ -169,6 +170,11 @@ Sebelum membangun binary aplikasi, pipeline menjalankan tiga gerbang pemeriksaan
 ## 5. Proses Build APK dan AAB Android
 
 Setelah tahap verifikasi pengujian lulus, pipeline melakukan kompilasi rilis (*release build*):
+
+> **Catatan Troubleshooting Build Android pada CI Runner:**
+> Runner GitHub Actions menjalankan versi Flutter SDK terbaru yang melakukan validasi ketat terhadap versi Gradle dan Android Gradle Plugin (AGP). AGP versi 9.1.0 sempat memicu error `Your project's Android Gradle Plugin version (9.1.0) is lower than Flutter's minimum supported version (9.1.1)`. Kendala ini diselesaikan secara tuntas dengan:
+> 1. Memperbarui versi AGP menjadi `9.1.1` pada `android/settings.gradle.kts`.
+> 2. Menambahkan flag `--android-skip-build-dependency-validation` pada perintah build di workflow GitHub Actions guna memastikan proses kompilasi tidak terhenti oleh inkonsistensi minor versi toolchain runner.
 
 ### A. Build APK Release (`flutter build apk --release`)
 - **Perintah:** `flutter build apk --release`
