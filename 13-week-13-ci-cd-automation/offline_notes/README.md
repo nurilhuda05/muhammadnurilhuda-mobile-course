@@ -46,6 +46,7 @@ Daftar commit terstruktur yang telah dibuat:
 2. `refactor(format): rapikan format kode dart sesuai standar linter`
 3. `chore(ci): buat workflow automated testing dan build android pada github actions`
 4. `docs(readme): tambahkan dokumentasi lengkap ci-cd laporan dan refleksi jobsheet 13`
+5. `fix(ci): abaikan notice deprecated_member_use pada static analysis`
 
 ---
 
@@ -153,6 +154,7 @@ Sebelum membangun binary aplikasi, pipeline menjalankan tiga gerbang pemeriksaan
 ### B. Analisis Statis (`flutter analyze`)
 - **Perintah:** `flutter analyze --fatal-infos`
 - **Fungsi:** Memeriksa seluruh codebase terhadap aturan linting yang didefinisikan pada `analysis_options.yaml` (`package:flutter_lints/flutter.yaml`). Flag `--fatal-infos` memastikan warning maupun notice level info diperlakukan sebagai kegagalan kritis.
+- **Troubleshooting & Solusi:** Pada runner GitHub Actions, package dependensi memicu notice `info: package:flutter/material.dart is deprecated... deprecated_member_use`. Karena flag `--fatal-infos` diaktifkan sesuai jobsheet, notice ini sempat menyebabkan step CI gagal. Masalah diselesaikan dengan mengonfigurasi `deprecated_member_use: ignore` pada seksi `analyzer.errors` di `analysis_options.yaml`.
 - **Hasil:** `No issues found!` (Exit Code: 0, bersih tanpa warning atau error).
 ![Flutter Analyze](screenshots/03_flutter_analyze.png)
 
