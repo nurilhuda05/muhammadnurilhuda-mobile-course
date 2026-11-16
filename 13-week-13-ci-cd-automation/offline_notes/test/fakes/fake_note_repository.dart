@@ -5,10 +5,8 @@ import 'package:offline_notes/features/notes/domain/repositories/note_repository
 /// Implementasi Fake Repository untuk mengisolasi pengujian dari SQLite / Jaringan
 /// Sesuai Bagian 5 & 6 Jobsheet 12.
 class FakeNoteRepository implements NoteRepository {
-  FakeNoteRepository({
-    List<Note>? initialNotes,
-    this.failureToReturn,
-  }) : _notes = initialNotes != null ? List<Note>.from(initialNotes) : [];
+  FakeNoteRepository({List<Note>? initialNotes, this.failureToReturn})
+    : _notes = initialNotes != null ? List<Note>.from(initialNotes) : [];
 
   final List<Note> _notes;
   Failure? failureToReturn;

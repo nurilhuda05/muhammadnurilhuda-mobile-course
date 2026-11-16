@@ -7,10 +7,7 @@ import '../../domain/entities/note.dart';
 /// dan dibungkus oleh [RepaintBoundary] guna mengisolasi render layer
 /// dan mencegah repaint menyeluruh saat scrolling.
 class NoteItemTile extends StatelessWidget {
-  const NoteItemTile({
-    super.key,
-    required this.note,
-  });
+  const NoteItemTile({super.key, required this.note});
 
   final Note note;
 
@@ -18,16 +15,8 @@ class NoteItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: ListTile(
-        title: Text(
-          note.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: Text(
-          note.body,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
+        title: Text(note.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+        subtitle: Text(note.body, maxLines: 2, overflow: TextOverflow.ellipsis),
         trailing: Text(
           formatDateTime(note.updatedAt),
           style: Theme.of(context).textTheme.bodySmall,
