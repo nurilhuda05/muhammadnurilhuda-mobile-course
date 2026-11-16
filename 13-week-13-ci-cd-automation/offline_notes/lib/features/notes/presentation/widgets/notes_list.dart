@@ -14,12 +14,8 @@ class NotesList extends StatelessWidget {
       itemCount: notes.length,
       itemBuilder: (context, index) {
         final note = notes[index];
-        return NoteItemTile(
-          key: ValueKey(note.id ?? index),
-          note: note,
-        );
+        return NoteItemTile(key: ValueKey(note.id ?? index), note: note);
       },
     );
   }
 }
-
