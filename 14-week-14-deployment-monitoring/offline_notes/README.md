@@ -113,6 +113,7 @@ Dokumentasi tangkapan layar pengujian pada Android Emulator Pixel 7:
 
 ---
 
-## 6. Laporan Praktikum Lengkap
-Laporan resmi jobsheet beserta analisis mendalam dan hasil telemetry tersedia di:
-- [docs/release-report.md](docs/release-report.md)
+## 6. Laporan Praktikum dan Catatan Rilis
+Laporan resmi jobsheet beserta analisis mendalam, catatan rilis, dan hasil telemetry tersedia di:
+- Laporan Praktikum Rilis dan Monitoring: [docs/release-report.md](docs/release-report.md)
+- Catatan Rilis Beta (Release Notes): [docs/release-notes.md](docs/release-notes.md)

@@ -31,7 +31,7 @@
 ## 2. Persiapan Kandidat Rilis
 
 ### 2.1 Perubahan Versi pada `pubspec.yaml`
-Sesuai panduan Semantic Versioning dan penomoran build Flutter untuk Android (`versionName` dan `versionCode`), versi aplikasi dinaikkan dari `1.0.0+1` menjadi `1.0.0+2`:
+Sesuai panduan Semantic Versioning dan penomoran build Flutter untuk Android (`versionName` dan `versionCode`), versi aplikasi dinaikkan dari `1.0.0+1` menjadi `1.0.0+2`. Dokumentasi lengkap catatan rilis dan batasan rilis dapat dilihat pada file [release-notes.md](release-notes.md):
 ```yaml
 version: 1.0.0+2
 ```
