@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -28,10 +29,10 @@ class AiService {
       'contents': [
         {
           'parts': [
-            {'text': '$systemPrompt\n\nPertanyaan pengguna: $question'}
-          ]
-        }
-      ]
+            {'text': '$systemPrompt\n\nPertanyaan pengguna: $question'},
+          ],
+        },
+      ],
     });
 
     String lastErrorMessage = 'Gagal menghubungi AI API.';

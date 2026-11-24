@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../ai/ai_service.dart';
 
 final aiServiceProvider = Provider<AiService>((ref) => AiService());
@@ -183,8 +185,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 final msg = _messages[index];
                 return RepaintBoundary(
                   child: Align(
-                    alignment:
-                        msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment: msg.isUser
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
                     child: Card(
                       color: msg.isUser
                           ? Theme.of(context).colorScheme.primaryContainer
@@ -235,10 +238,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 class ApiKeyDialog extends StatefulWidget {
   final String initialKey;
 
-  const ApiKeyDialog({
-    super.key,
-    required this.initialKey,
-  });
+  const ApiKeyDialog({super.key, required this.initialKey});
 
   @override
   State<ApiKeyDialog> createState() => _ApiKeyDialogState();

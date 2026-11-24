@@ -90,4 +90,3 @@ class NoteRepositoryImpl implements NoteRepository {
     }
   }
 }
-

@@ -38,8 +38,14 @@ void main() {
       const testTitle = 'Catatan Integrasi QA';
       const testBody = 'Pengujian alur end-to-end aplikasi Flutter';
 
-      await tester.enterText(find.byKey(const Key('note-title-field')), testTitle);
-      await tester.enterText(find.byKey(const Key('note-body-field')), testBody);
+      await tester.enterText(
+        find.byKey(const Key('note-title-field')),
+        testTitle,
+      );
+      await tester.enterText(
+        find.byKey(const Key('note-body-field')),
+        testBody,
+      );
       await tester.pumpAndSettle();
 
       // 6. Tekan tombol Simpan

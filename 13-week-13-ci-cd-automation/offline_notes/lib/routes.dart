@@ -11,9 +11,6 @@ final GoRouter appRouter = GoRouter(
       path: '/announcements',
       builder: (context, state) => const AnnouncementsPage(),
     ),
-    GoRoute(
-      path: '/ai-chat',
-      builder: (context, state) => const ChatScreen(),
-    ),
+    GoRoute(path: '/ai-chat', builder: (context, state) => const ChatScreen()),
   ],
 );

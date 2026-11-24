@@ -51,7 +51,8 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               builder: (context, ref, _) {
                 final state = ref.watch(notesProvider);
                 return state.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                   error: (e, _) => ErrorView(
                     message: '$e',
                     onRetry: () => ref.invalidate(notesProvider),
@@ -60,9 +61,14 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                     return ValueListenableBuilder<String>(
                       valueListenable: _queryNotifier,
                       builder: (context, query, _) {
-                        final filtered = ref.read(searchNotesProvider)(notes, query);
+                        final filtered = ref.read(searchNotesProvider)(
+                          notes,
+                          query,
+                        );
                         if (filtered.isEmpty) {
-                          return NotesEmptyState(isSearching: query.trim().isNotEmpty);
+                          return NotesEmptyState(
+                            isSearching: query.trim().isNotEmpty,
+                          );
                         }
                         return NotesList(filtered);
                       },
@@ -86,4 +92,4 @@ class _NotesPageState extends ConsumerState<NotesPage> {
       ),
     );
   }
-}
+}

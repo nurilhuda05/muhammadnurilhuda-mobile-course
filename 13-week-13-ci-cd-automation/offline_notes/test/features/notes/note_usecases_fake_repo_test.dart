@@ -8,29 +8,44 @@ import '../../fakes/fake_note_repository.dart';
 
 void main() {
   group('Pengujian Usecase dengan FakeNoteRepository (AAA Pattern)', () {
-    test('GetNotes berhasil mengambil daftar catatan dari FakeNoteRepository', () async {
-      // 1. Arrange
-      final initialData = [
-        Note(id: 1, title: 'Tugas Mobile', body: 'Jobsheet 12', updatedAt: DateTime(2026, 11, 10)),
-        Note(id: 2, title: 'PBL', body: 'Progress Sprint', updatedAt: DateTime(2026, 11, 10)),
-      ];
-      final fakeRepo = FakeNoteRepository(initialNotes: initialData);
-      final getNotes = GetNotes(fakeRepo);
+    test(
+      'GetNotes berhasil mengambil daftar catatan dari FakeNoteRepository',
+      () async {
+        // 1. Arrange
+        final initialData = [
+          Note(
+            id: 1,
+            title: 'Tugas Mobile',
+            body: 'Jobsheet 12',
+            updatedAt: DateTime(2026, 11, 10),
+          ),
+          Note(
+            id: 2,
+            title: 'PBL',
+            body: 'Progress Sprint',
+            updatedAt: DateTime(2026, 11, 10),
+          ),
+        ];
+        final fakeRepo = FakeNoteRepository(initialNotes: initialData);
+        final getNotes = GetNotes(fakeRepo);
 
-      // 2. Act
-      final result = await getNotes();
+        // 2. Act
+        final result = await getNotes();
 
-      // 3. Assert
-      expect(result.failure, isNull);
-      expect(result.notes.length, 2);
-      expect(result.notes.first.title, 'Tugas Mobile');
-      expect(fakeRepo.fetchNotesCallCount, 1);
-    });
+        // 3. Assert
+        expect(result.failure, isNull);
+        expect(result.notes.length, 2);
+        expect(result.notes.first.title, 'Tugas Mobile');
+        expect(fakeRepo.fetchNotesCallCount, 1);
+      },
+    );
 
     test('GetNotes menangani kondisi kegagalan data tanpa melempar crash (Failure Condition)', () async {
       // 1. Arrange
       final fakeRepo = FakeNoteRepository(
-        failureToReturn: const LocalFailure('Gagal mengakses penyimpanan lokal'),
+        failureToReturn: const LocalFailure(
+          'Gagal mengakses penyimpanan lokal',
+        ),
       );
       final getNotes = GetNotes(fakeRepo);
 
@@ -50,7 +65,10 @@ void main() {
       final addNote = AddNote(fakeRepo);
 
       // 2. Act
-      final result = await addNote(title: 'Catatan Baru', body: 'Deskripsi pengujian');
+      final result = await addNote(
+        title: 'Catatan Baru',
+        body: 'Deskripsi pengujian',
+      );
 
       // 3. Assert
       expect(result.failure, isNull);
@@ -98,4 +116,3 @@ void main() {
     });
   });
 }
-
