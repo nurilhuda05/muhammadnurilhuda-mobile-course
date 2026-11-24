@@ -16,10 +16,21 @@ concurrency:
 
 jobs:
   test-and-build:
+    name: Build & Test (${{ matrix.name }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: week14-deployment-monitoring
+            working-dir: 14-week-14-deployment-monitoring/offline_notes
+            artifact-name: android-builds-week14
+          - name: week13-ci-cd
+            working-dir: 13-week-13-ci-cd-automation/offline_notes
+            artifact-name: android-builds-week13
     defaults:
       run:
-        working-directory: 13-week-13-ci-cd-automation/offline_notes
+        working-directory: ${{ matrix.working-dir }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -56,9 +67,9 @@ jobs:
       - name: Upload Android Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: android-builds
+          name: ${{ matrix.artifact-name }}
           path: |
-            13-week-13-ci-cd-automation/offline_notes/build/app/outputs/flutter-apk/app-release.apk
-            13-week-13-ci-cd-automation/offline_notes/build/app/outputs/bundle/release/app-release.aab
+            ${{ matrix.working-dir }}/build/app/outputs/flutter-apk/app-release.apk
+            ${{ matrix.working-dir }}/build/app/outputs/bundle/release/app-release.aab
           if-no-files-found: error
           retention-days: 7
