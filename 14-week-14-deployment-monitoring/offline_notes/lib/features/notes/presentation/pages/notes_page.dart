@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/telemetry_service.dart';
 import '../providers/notes_providers.dart';
 import '../widgets/add_note_dialog.dart';
 import '../widgets/error_view.dart';
@@ -37,6 +38,69 @@ class _NotesPageState extends ConsumerState<NotesPage> {
             icon: const Icon(Icons.smart_toy_outlined),
             tooltip: 'Asisten AI',
             onPressed: () => context.push('/ai-chat'),
+          ),
+          PopupMenuButton<String>(
+            tooltip: 'Menu Beta & Telemetry',
+            icon: const Icon(Icons.bug_report_outlined),
+            onSelected: (value) async {
+              if (value == 'feedback') {
+                await TelemetryService.instance.logBetaFeedback(
+                  screenName: 'home',
+                );
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Umpan balik beta berhasil dicatat oleh Analytics!',
+                      ),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+              } else if (value == 'non_fatal') {
+                await TelemetryService.instance.recordNonFatalTestError(
+                  source: 'notes_app_bar_menu',
+                );
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Laporan non-fatal berhasil dikirim ke Crashlytics!',
+                      ),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+              } else if (value == 'fatal') {
+                TelemetryService.instance.triggerFatalTestCrash();
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'feedback',
+                child: ListTile(
+                  leading: Icon(Icons.feedback_outlined),
+                  title: Text('Kirim Umpan Balik Beta'),
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'non_fatal',
+                child: ListTile(
+                  leading: Icon(Icons.warning_amber_rounded),
+                  title: Text('Uji Crashlytics (Non-Fatal)'),
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'fatal',
+                child: ListTile(
+                  leading: Icon(Icons.dangerous_outlined),
+                  title: Text('Uji Crashlytics (Fatal)'),
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+            ],
           ),
         ],
       ),
